@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'Rubik', sans-serif;
+ src: url('./Rubik-Regular.ttf');
+ font-weight: 400;
+
+}
+
+.hello {
+  color: rgb(43, 226, 192);
+  font-family: 'Rubik', sans-serif;
+  background: url('./ice.jpg');
+}
