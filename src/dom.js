@@ -1,6 +1,6 @@
 import { add } from 'lodash';
 import Icon from './ice.jpg';
-import { receiveItemData, toDoList } from './logic.mjs';
+import { getFromLocalStorage, receiveItemData } from './logic.mjs';
 import printMe from './print.js';
 
 const component = () => {
@@ -40,9 +40,10 @@ const createLi = (i) => {
   }
 
   const data = receiveItemData();
+  const list = getFromLocalStorage();
   const textnode1 = document.createTextNode(data.toDoText);
-  const textnode2 = document.createTextNode(toDoList[i].toDoText.value);
-  li.textContent = data.toDoText;
+  const textnode2 = document.createTextNode(list[i].list.value);
+  li.textContent = data.list;
   li.append(textnode1);
   li.append(textnode2);
   console.log('li created');
@@ -63,8 +64,9 @@ const createInput = (type, name) => {
   return { input, label };
 };
 
-const createList = (toDoList) => {
+const createList = () => {
   const ul = document.createElement('ul');
+  const toDoList = getFromLocalStorage();
   toDoList.map((item, i) => {
     ul.append(createLi(i));
   });

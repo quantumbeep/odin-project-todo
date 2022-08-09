@@ -5,16 +5,18 @@ import {
   createInput,
   createList,
 } from './dom.js';
-import { addItemToList, toDoList} from './logic.mjs';
+import { addItemToList, handleAdd} from './logic.mjs';
 import './style.css';
 
 document.body.appendChild(component());
 const el = document.querySelector('div');
-el.append(createBtn('ADD'));
-const instance = createInput('number', 'phone');
+el.append(createBtn('ADD', handleAdd));
+const addBtn = document.querySelector('.add')
+const text = createInput('text', 'todo');
+const date = createInput('date', 'date');
 
-el.append(instance.input);
-addItemToList();
-addItemToList();
-addItemToList();
-createList(toDoList);
+
+el.append(text.input);
+el.append(date.input);
+
+createList();

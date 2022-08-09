@@ -1,4 +1,4 @@
-let toDoList = [];
+// let toDoList = [];
 
 //editFn
 const editToDo = () => {
@@ -7,20 +7,43 @@ const editToDo = () => {
 
 //delFn
 
-const receiveItemData = (toDoText, dueDate) => {
+const receiveItemData = () => {
+  const toDoInput = document.querySelector('.input-text').value;
+  console.log(toDoInput);
   return {
-    toDoText: "toDoText",
-    dueDate: "dueDate",
+    toDoText: toDoInput,
+    dueDate: 'Sample dueDate',
     dateCreated: Date.now(),
-    // editBtn: createBtn('EDIT', editFn),
-    // deleteBtn: createBtn('DEL', delFn),
   };
 };
 
-const addItemToList = () => {
-  const newToDoItem = receiveItemData('sample text', 'sample date');
-  toDoList.push(newToDoItem);
-  console.log({toDoList});
+const addItemToList = (item, list) => {
+  list.push(item);
+  console.log({ list });
 };
 
-export { receiveItemData, addItemToList, toDoList };
+const saveToLocalStorage = (list) => {
+  localStorage.setItem('list', JSON.stringify(list));
+};
+
+const getFromLocalStorage = () => {
+  return JSON.parse(localStorage.getItem('list') || '[]');
+};
+
+const handleAdd = () => {
+  //receive the data into obj
+  const itemData = receiveItemData();
+  console.log(itemData);
+
+  //retrieve list from local storage
+  const list = getFromLocalStorage();
+  console.log({ list });
+
+  //push obj to array
+  addItemToList(itemData, list);
+
+  //store array in local storage (stringify it first)
+  saveToLocalStorage(list);
+};
+
+export { receiveItemData, addItemToList, getFromLocalStorage, handleAdd };
