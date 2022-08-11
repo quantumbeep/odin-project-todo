@@ -52,5 +52,16 @@ li {
   border-radius: 5px;
   width: 400px;
   height: 100px;
+  /* align-items: center;
+  justify-content: center; */
   place-items: center;
+  margin-bottom: 2px;
+}
+
+li > p {
+  font-size: 10px;
+  font-family: 'Rubik', sans-serif;
+  color: rgb(0, 0, 0);
+  margin: 0;
+  padding: 0;
 }

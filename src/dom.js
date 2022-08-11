@@ -1,6 +1,6 @@
 import { add } from 'lodash';
 import Icon from './ice.jpg';
-import { getFromLocalStorage, receiveItemData } from './logic.mjs';
+import { getFromLocalStorage, handleDel } from './logic.mjs';
 import printMe from './print.js';
 
 const component = () => {
@@ -39,13 +39,20 @@ const createLi = (i) => {
     li.classList.add('li');
   }
 
-  const data = receiveItemData();
   const list = getFromLocalStorage();
-  const textnode1 = document.createTextNode(data.toDoText);
-  const textnode2 = document.createTextNode(list[i].list.value);
-  li.textContent = data.list;
-  li.append(textnode1);
+  const id = document.createElement('p');
+  const textnode2 = document.createElement('p');
+  const textnode3 = document.createElement('p');
+  id.textContent = list[i].dateCreated;
+  textnode2.textContent = list[i].toDoText;
+  textnode3.textContent = list[i].dueDate;
+  li.setAttribute('id', list[i].dateCreated)
+  li.append(id);
   li.append(textnode2);
+  li.append(textnode3);
+
+  const delBtn = createBtn('DEL', handleDel);
+  li.append(delBtn);
   console.log('li created');
   return li;
 };
@@ -64,13 +71,23 @@ const createInput = (type, name) => {
   return { input, label };
 };
 
+const clearList = () => {
+  const ul = document.querySelector('ul');
+  ul.remove();
+};
+
+const clearLocalStorage = () => {
+  localStorage.clear();
+  console.log('local cleared');
+}
+
 const createList = () => {
   const ul = document.createElement('ul');
-  const toDoList = getFromLocalStorage();
-  toDoList.map((item, i) => {
+  const list = getFromLocalStorage();
+  list.map((item, i) => {
     ul.append(createLi(i));
   });
   document.body.append(ul);
 };
 
-export { component, createInput, createLi, createBtn, createList };
+export { component, createInput, createLi, createBtn, createList, clearList, clearLocalStorage};
