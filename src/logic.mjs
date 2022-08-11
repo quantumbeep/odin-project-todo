@@ -96,7 +96,7 @@ const handleEdit = (e) => {
   //dom create input field - text, due date
   createInput('text', 'edit');
   createInput('date', 'newDue');
-  const editTarget = e.target.parentElement
+  const editTarget = e.target.parentElement;
 
   //retrieve list from local storage
   const list = getFromLocalStorage();
@@ -120,4 +120,5 @@ export {
   getFromLocalStorage,
   handleAdd,
   handleDel,
+  handleEdit,
 };
