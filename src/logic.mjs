@@ -1,4 +1,4 @@
-import { clearList, createInput, createList } from './dom.js';
+import { clearList, createBtn, createInput, createList } from './dom.js';
 
 const receiveItemData = () => {
   const toDoText = document.querySelector('.input-text').value;
@@ -89,14 +89,35 @@ const handleDel = (e) => {
   //re-render list
   createList();
 };
+const enableSave = () => {};
+
+const saveEdit = () => {
+  //
+};
+
+const checkChange = (e) => {
+  const itemContent =
+    e.target.parentElement.querySelector('.item-text').textContent;
+
+  const fieldContent = editField.input.value;
+  return itemContent === fieldContent;
+};
 
 const handleEdit = (e) => {
   e.preventDefault();
 
   //dom create input field - text, due date
-  createInput('text', 'edit');
-  createInput('date', 'newDue');
-  const editTarget = e.target.parentElement;
+  const editField = createInput('text', 'edit');
+  const dateField = createInput('date', 'newDue');
+  e.target.parentElement.append(editField.input);
+  e.target.parentElement.append(dateField.input);
+  const saveBtn = createBtn('SAVE', saveEdit);
+  e.target.parentElement.append(saveBtn);
+  document.querySelector('#SAVE-btn').setAttribute('disabled', '');
+  editField.input.addEventListener('focus', (e) => {
+    checkChange(e);
+    document.querySelector('#SAVE-btn').removeAttribute('disabled');
+  });
 
   //retrieve list from local storage
   const list = getFromLocalStorage();
