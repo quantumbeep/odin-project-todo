@@ -1,19 +1,15 @@
-// let toDoList = [];
-
-import { clearList, createList } from './dom.js';
-
-//editFn
-const editToDo = () => {
-  //change the value of 'toDoText' property in toDoItem
-};
+import { clearList, createInput, createList } from './dom.js';
 
 const receiveItemData = () => {
-  const toDoInput = document.querySelector('.input-text').value;
+  const toDoText = document.querySelector('.input-text').value;
+  const dueDate = document.querySelector('.input-date').value;
   console.log('received item data from inputs');
+  const dateCreated = Date.now();
+
   return {
-    toDoText: toDoInput,
-    dueDate: 'Sample dueDate',
-    dateCreated: Date.now(),
+    toDoText,
+    dueDate,
+    dateCreated,
   };
 };
 
@@ -32,6 +28,15 @@ const delItemFromList = (e, list) => {
   );
   console.log({ filteredList });
   return filteredList;
+};
+
+//editFn
+const editItem = (e, list) => {
+  //change the value of 'toDoText' property in toDoItem
+  const editTarget = e.target.parentElement.id;
+  const foundItem = list.find(
+    (item) => item.dateCreated.toString() === editTarget
+  );
 };
 
 const saveToLocalStorage = (modifiedList) => {
@@ -67,6 +72,8 @@ const handleAdd = () => {
 };
 
 const handleDel = (e) => {
+  e.preventDefault();
+
   //retrieve list from local storage
   const list = getFromLocalStorage();
 
@@ -75,6 +82,30 @@ const handleDel = (e) => {
 
   //store array in local storage (stringify it first)
   saveToLocalStorage(listAfterDel);
+
+  //clear the list before re-rendering
+  clearList();
+
+  //re-render list
+  createList();
+};
+
+const handleEdit = (e) => {
+  e.preventDefault();
+
+  //dom create input field - text, due date
+  createInput('text', 'edit');
+  createInput('date', 'newDue');
+  const editTarget = e.target.parentElement
+
+  //retrieve list from local storage
+  const list = getFromLocalStorage();
+
+  //update obj property in array
+  const listAfterEdit = editItem(e, itemData, list);
+
+  //store array in local storage (stringify it first)
+  saveToLocalStorage(listAfterEdit);
 
   //clear the list before re-rendering
   clearList();
