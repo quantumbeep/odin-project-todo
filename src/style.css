@@ -5,23 +5,11 @@
 }
 
 .hello {
-  color: rgb(43, 226, 192);
+  color: rgb(10, 107, 89);
   font-family: 'Rubik', sans-serif;
   background: url('./ice.jpg');
 }
 
-.box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  border: 3px solid black;
-  width: 100px;
-  height: 100px;
-  background: rgb(131, 26, 139);
-}
 
 .input-text {
   width: 50%;
@@ -31,6 +19,21 @@
   font-size: 20px;
   font-family: 'Rubik', sans-serif;
   color: rgb(0, 0, 0);
+}
+
+input {
+  width: 50%;
+  height: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 20px;
+  font-family: 'Rubik', sans-serif;
+  color: rgb(0, 0, 0);
+}
+
+
+label {
+  color:rgb(0, 0, 0)
 }
 
 ul {
@@ -47,19 +50,19 @@ ul {
 
 li {
   display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
   background: rgb(184, 167, 167);
   border: #333 1px solid;
   border-radius: 5px;
   width: 400px;
-  height: 100px;
-  /* align-items: center;
-  justify-content: center; */
+  height: 300px;
   place-items: center;
   margin-bottom: 2px;
 }
 
 li > p {
-  font-size: 10px;
+  font-size: 15px;
   font-family: 'Rubik', sans-serif;
   color: rgb(0, 0, 0);
   margin: 0;

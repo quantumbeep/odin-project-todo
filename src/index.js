@@ -5,6 +5,7 @@ import {
   createBtn,
   createInput,
   createList,
+  autoToggleSave
   
 } from './dom.js';
 import { handleAdd } from './logic.mjs';
@@ -25,5 +26,9 @@ const date = createInput('date', 'date');
 
 el.append(text.input);
 el.append(date.input);
+el.append(text.label);
+el.append(date.label);
 
 createList();
+document.querySelector('body').addEventListener('keydown', autoToggleSave);
+

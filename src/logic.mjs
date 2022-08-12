@@ -1,4 +1,11 @@
-import { clearList, createBtn, createInput, createList } from './dom.js';
+import { indexOf, update } from 'lodash';
+import {
+  autoToggleSave,
+  clearList,
+  createBtn,
+  createInput,
+  createList,
+} from './dom.js';
 
 const receiveItemData = () => {
   const toDoText = document.querySelector('.input-text').value;
@@ -30,13 +37,20 @@ const delItemFromList = (e, list) => {
   return filteredList;
 };
 
-//editFn
-const editItem = (e, list) => {
+const editItem = (e, newData, list) => {
   //change the value of 'toDoText' property in toDoItem
   const editTarget = e.target.parentElement.id;
   const foundItem = list.find(
     (item) => item.dateCreated.toString() === editTarget
   );
+  console.log(list.indexOf(foundItem));
+  console.log(foundItem);
+  const targetIndex = list.indexOf(foundItem);
+  const { toDoText, dueDate } = newData;
+  const updatedItem = { ...foundItem, toDoText, dueDate };
+  console.log(updatedItem);
+  list.splice(targetIndex, 1, updatedItem);
+  return list;
 };
 
 const saveToLocalStorage = (modifiedList) => {
@@ -89,41 +103,37 @@ const handleDel = (e) => {
   //re-render list
   createList();
 };
-const enableSave = () => {};
-
-const saveEdit = () => {
-  //
-};
 
 const checkChange = (e) => {
-  const itemContent =
-    e.target.parentElement.querySelector('.item-text').textContent;
+  const target = e.target;
+  console.log(target.id);
+  if (target && target.id === 'input-edit') {
+    const itemContent =
+      e.target.parentElement.querySelector('.item-text').textContent;
+    const targetContent = target.value;
+    return itemContent === targetContent || false;
+  }
+};
 
-  const fieldContent = editField.input.value;
-  return itemContent === fieldContent;
+const getNewData = () => {
+  const edit = document.querySelector('.input-edit');
+  const due = document.querySelector('.input-newDue');
+  return {
+    toDoText: edit.value,
+    dueDate: due.value,
+  };
 };
 
 const handleEdit = (e) => {
-  e.preventDefault();
-
-  //dom create input field - text, due date
-  const editField = createInput('text', 'edit');
-  const dateField = createInput('date', 'newDue');
-  e.target.parentElement.append(editField.input);
-  e.target.parentElement.append(dateField.input);
-  const saveBtn = createBtn('SAVE', saveEdit);
-  e.target.parentElement.append(saveBtn);
-  document.querySelector('#SAVE-btn').setAttribute('disabled', '');
-  editField.input.addEventListener('focus', (e) => {
-    checkChange(e);
-    document.querySelector('#SAVE-btn').removeAttribute('disabled');
-  });
-
+  //get item data from edit fields
+  const newData = getNewData();
+  console.log(newData);
   //retrieve list from local storage
   const list = getFromLocalStorage();
 
   //update obj property in array
-  const listAfterEdit = editItem(e, itemData, list);
+  const listAfterEdit = editItem(e, newData, list);
+  console.log(listAfterEdit);
 
   //store array in local storage (stringify it first)
   saveToLocalStorage(listAfterEdit);
@@ -142,4 +152,5 @@ export {
   handleAdd,
   handleDel,
   handleEdit,
+  checkChange,
 };
