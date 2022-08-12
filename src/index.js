@@ -13,7 +13,9 @@ import './style.css';
 
 document.body.appendChild(component());
 const el = document.querySelector('div');
-el.append(createBtn('ADD', handleAdd));
+el.append(createBtn('ADD'));
+const addBtn = document.querySelector('.ADD')
+addBtn.addEventListener('click', handleAdd)
 el.append(
   createBtn('RESET', function () {
     clearLocalStorage();

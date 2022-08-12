@@ -3,6 +3,7 @@ import Icon from './ice.jpg';
 import {
   checkChange,
   getFromLocalStorage,
+  handleAdd,
   handleDel,
   handleEdit,
 } from './logic.mjs';
@@ -33,7 +34,7 @@ const createBtn = (btnName, btnFn) => {
   btn.textContent = btnName;
   btn.classList.add(`${btnName}`);
   btn.setAttribute('id', `${btnName}-btn`);
-  btn.addEventListener('click', btnFn);
+  // btn.addEventListener('click', btnFn);
   return btn;
 };
 
@@ -44,6 +45,8 @@ const createLi = (i) => {
   } else {
     li.classList.add('li');
   }
+  const btnContainer = document.createElement('div');
+  const dataContainer = document.createElement('div');
 
   const list = getFromLocalStorage();
   const id = document.createElement('p');
@@ -53,17 +56,17 @@ const createLi = (i) => {
   id.classList.add('item-id');
   toDo.classList.add('item-text');
   dueDate.classList.add('item-due');
-  id.textContent = list[i].dateCreated;
-  toDo.textContent = list[i].toDoText;
-  dueDate.textContent = list[i].dueDate;
+  id.textContent = `ID: ${list[i].dateCreated}`;
+  toDo.textContent = `To Do: ${list[i].toDoText}`;
+  dueDate.textContent = `Due Date: ${list[i].dueDate}`;
   li.append(toDo);
   li.append(dueDate);
   li.append(id);
 
-  const delBtn = createBtn('DEL', handleDel);
+  const delBtn = createBtn('DEL');
   li.append(delBtn);
 
-  const editBtn = createBtn('EDIT', showEditField);
+  const editBtn = createBtn('EDIT');
   li.append(editBtn);
   console.log('li created');
   return li;
@@ -88,8 +91,22 @@ const createInput = (type, name) => {
 
 const createList = () => {
   const ul = document.createElement('ul');
+  ul.addEventListener('click', (e) => {
+    console.log(e.target);
+    if (e.target.id === 'EDIT-btn') {
+      showEditField(e);
+    } else if (e.target.id === 'SAVE-btn') {
+      handleEdit(e);
+    
+    } else if (e.target.id === 'DEL-btn') {
+      handleDel(e);
+    
+    } else if (e.target.id === 'CANCEL-btn') {
+      removeEditField(e);
+    }
+  });
   const list = getFromLocalStorage();
-  list.map((item, i) => {
+  list.forEach((item, i) => {
     ul.append(createLi(i));
   });
   document.body.append(ul);
@@ -107,30 +124,26 @@ const clearLocalStorage = () => {
 
 const showEditField = (e) => {
   //dom create input field - text, due date
-  if(e.target && e.target.id == 'EDIT-btn'){
-  
-    const editField = createInput('text', 'edit');
-    const dateField = createInput('date', 'newDue');
-    e.target.parentElement.append(editField.input);
-    e.target.parentElement.append(dateField.input);
-    console.log(`edit field ${editField.input}`);
-    const saveBtn = createBtn('SAVE', handleEdit);
-    e.target.parentElement.append(saveBtn);
-    const cancelBtn = createBtn('CANCEL', removeEditField);
-    e.target.parentElement.append(cancelBtn);
-    document.querySelector('#SAVE-btn').setAttribute('disabled', '');
-  }
+  // if(e.target && e.target.id == 'EDIT-btn'){
+
+  const editField = createInput('text', 'edit');
+  const dateField = createInput('date', 'newDue');
+  e.target.parentElement.append(editField.input);
+  e.target.parentElement.append(dateField.input);
+  console.log(`edit field ${editField.input}`);
+  const saveBtn = createBtn('SAVE', handleEdit);
+  e.target.parentElement.append(saveBtn);
+  const cancelBtn = createBtn('CANCEL', removeEditField);
+  e.target.parentElement.append(cancelBtn);
+  document.querySelector('#SAVE-btn').setAttribute('disabled', '');
+  // }
 };
 
 const removeEditField = () => {
-  clearList()
-  createList()
-}
-
-const showCancel = () => {
-  const cancelBtn = createBtn('CANCEL', handleCancel);
-  e.target.parentElement.append(cancelBtn);
+  clearList();
+  createList();
 };
+
 const autoToggleSave = (e) => {
   const target = e.target;
   console.log(target.id);

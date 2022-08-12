@@ -4,7 +4,7 @@ import {
   clearList,
   createBtn,
   createInput,
-  createList
+  createList,
 } from './dom.js';
 
 const receiveItemData = () => {
@@ -13,6 +13,9 @@ const receiveItemData = () => {
   console.log('received item data from inputs');
   const dateCreated = Date.now();
 
+  if (!toDoText || !dueDate) {
+    alert('Please complete the missing fields...');
+  }
   return {
     toDoText,
     dueDate,
@@ -64,7 +67,7 @@ const getFromLocalStorage = () => {
   return JSON.parse(data);
 };
 
-const handleAdd = () => {
+const handleAdd = (e) => {
   //receive the data into obj
   const itemData = receiveItemData();
 
@@ -141,9 +144,8 @@ const handleEdit = (e) => {
   createList();
 
   //notify edit has been saved successfully
-  alert('Item edited successfully')
+  alert('Item edited successfully');
 };
-
 
 export {
   receiveItemData,

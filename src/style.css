@@ -4,21 +4,38 @@
   font-weight: 400;
 }
 
+body {
+  font-family: 'Rubik', sans-serif;
+}
 .hello {
   color: rgb(10, 107, 89);
-  font-family: 'Rubik', sans-serif;
   background: url('./ice.jpg');
 }
 
-
-.input-text {
-  width: 50%;
-  height: 100%;
-  border: 1px solid black;
+button {
+  background: rgb(0, 56, 135);
+  color: white;
+  font-weight: 900;
+  outline: 2px outset rgb(0, 0, 0);
   border-radius: 5px;
+  margin: 5px;
+  padding: 10px;
   font-size: 20px;
-  font-family: 'Rubik', sans-serif;
-  color: rgb(0, 0, 0);
+  transition: ease-in-out 0.2s;
+}
+
+button:hover {
+  background: rgb(97, 163, 255);
+  color: rgb(59, 59, 59);
+  outline: 2px outset rgb(0, 0, 0);
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 20px;
+}
+
+:disabled {
+  pointer-events: none;
+  opacity: 0.3;
 }
 
 input {
@@ -30,10 +47,22 @@ input {
   font-family: 'Rubik', sans-serif;
   color: rgb(0, 0, 0);
 }
+li input {
+  width: 50%;
+  height: 4rem;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 12px;
+  font-family: 'Rubik', sans-serif;
+  color: rgb(0, 0, 0);
+}
 
+.input-edit {
+  width: 10rem;
+}
 
 label {
-  color:rgb(0, 0, 0)
+  color: rgb(0, 0, 0);
 }
 
 ul {
@@ -51,11 +80,12 @@ ul {
 li {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
   gap: 5px;
   background: rgb(184, 167, 167);
   border: #333 1px solid;
   border-radius: 5px;
-  width: 400px;
+  width: 80%;
   height: 300px;
   place-items: center;
   margin-bottom: 2px;
