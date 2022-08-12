@@ -4,7 +4,7 @@ import {
   clearList,
   createBtn,
   createInput,
-  createList,
+  createList
 } from './dom.js';
 
 const receiveItemData = () => {
@@ -105,14 +105,10 @@ const handleDel = (e) => {
 };
 
 const checkChange = (e) => {
-  const target = e.target;
-  console.log(target.id);
-  if (target && target.id === 'input-edit') {
-    const itemContent =
-      e.target.parentElement.querySelector('.item-text').textContent;
-    const targetContent = target.value;
-    return itemContent === targetContent || false;
-  }
+  const itemContent =
+    e.target.parentElement.querySelector('.item-text').textContent;
+  const targetContent = e.target.value;
+  return itemContent === targetContent || false;
 };
 
 const getNewData = () => {
@@ -141,9 +137,13 @@ const handleEdit = (e) => {
   //clear the list before re-rendering
   clearList();
 
-  //re-render list
+  //re-render listsrc
   createList();
+
+  //notify edit has been saved successfully
+  alert('Item edited successfully')
 };
+
 
 export {
   receiveItemData,

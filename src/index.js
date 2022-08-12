@@ -30,5 +30,5 @@ el.append(text.label);
 el.append(date.label);
 
 createList();
-document.querySelector('body').addEventListener('keydown', autoToggleSave);
+document.querySelector('body').addEventListener('input', autoToggleSave);
 
