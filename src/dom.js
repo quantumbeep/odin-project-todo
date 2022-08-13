@@ -106,7 +106,7 @@ const createList = () => {
     }
   });
   const list = getFromLocalStorage();
-  list.forEach((item, i) => {
+  list.slice().reverse().forEach((item, i) => {
     ul.append(createLi(i));
   });
   document.body.append(ul);
