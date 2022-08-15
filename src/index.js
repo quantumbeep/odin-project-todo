@@ -1,36 +1,26 @@
-import {
-  clearList,
-  clearLocalStorage,
-  component,
-  createBtn,
-  createInput,
-  createList,
-  autoToggleSave
-  
-} from './dom.js';
-import { handleAdd } from './logic.mjs';
+import { autoToggleSave, createList, header } from './dom.js';
+import { handleAdd, handleDel, handleEdit } from './logic.mjs';
+import { removeEditField, showEditField } from './dom.js';
 import './style.css';
 
-document.body.appendChild(component());
-const el = document.querySelector('div');
-el.append(createBtn('ADD'));
-const addBtn = document.querySelector('.ADD')
-addBtn.addEventListener('click', handleAdd)
-el.append(
-  createBtn('RESET', function () {
-    clearLocalStorage();
-    clearList()
-    createList();
-  })
-);
-const text = createInput('text', 'todo');
-const date = createInput('date', 'date');
+const hed = header();
+document.body.append(hed);
 
-el.append(text.input);
-el.append(date.input);
-el.append(text.label);
-el.append(date.label);
+//event delegation for buttons within li element
+document.body.addEventListener('click', (e) => {
+  console.log(e.target);
+  if (e.target.id === 'ADD-btn') {
+    handleAdd(e);
+  } else if (e.target.id === 'EDIT-btn') {
+    showEditField(e);
+  } else if (e.target.id === 'SAVE-btn') {
+    handleEdit(e);
+  } else if (e.target.id === 'DEL-btn') {
+    handleDel(e);
+  } else if (e.target.id === 'CANCEL-btn') {
+    removeEditField(e);
+  }
+});
 
 createList();
-document.querySelector('body').addEventListener('input', autoToggleSave);
-
+document.querySelector('ul').addEventListener('input', autoToggleSave);
