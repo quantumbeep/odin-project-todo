@@ -7,35 +7,44 @@ import {
   handleDel,
   handleEdit,
 } from './logic.mjs';
-import printMe from './print.js';
 
-const component = () => {
-  const element = document.createElement('div');
-  const btn = document.createElement('button');
-
-  element.innerHTML = ['Hello', 'there'].join(' ');
-  element.classList.add('hello');
+const header = () => {
+  const header = document.createElement('header');
+  const mainForm = document.createElement('form');
+  header.classList.add('header');
+  mainForm.classList.add('main-form');
+  header.append(mainForm);
   // Add the image to our existing div.
   const myIcon = new Image();
   myIcon.src = Icon;
 
-  element.appendChild(myIcon);
-  btn.innerHTML = 'Click me and check the console!';
-  btn.onclick = printMe;
+  //--Use the button factory--
+  // 1. Make a button object first
+  const addItemBtn = ButtonFactory('ADD');
+  // 2. Call function on the btn object
+  mainForm.append(addItemBtn);
+  // mainForm.append(btn.createBtn('RESET'));
 
-  element.appendChild(btn);
+  // 3. Select the button using automatically created class
+  //4. Add an event listener to it
+  // document.querySelector('.ADD').addEventListener('click', handleAdd);
+  // document.querySelector('.RESET').addEventListener('click', reset);
 
-  return element;
+  const text = createInput('text', 'todo');
+  const date = createInput('date', 'date');
+  mainForm.append(text.input);
+  mainForm.append(date.input);
+  mainForm.append(text.label);
+  mainForm.append(date.label);
+  return header;
 };
 
-//DOM creation
-const createBtn = (btnName, btnFn) => {
-  const btn = document.createElement('button');
-  btn.textContent = btnName;
-  btn.classList.add(`${btnName}`);
-  btn.setAttribute('id', `${btnName}-btn`);
-  // btn.addEventListener('click', btnFn);
-  return btn;
+const ButtonFactory = (name) => {
+  const buttonEl = document.createElement('button');
+  buttonEl.textContent = name;
+  buttonEl.classList.add(name);
+  buttonEl.setAttribute('id', `${name}-btn`);
+  return buttonEl;
 };
 
 const createLi = (i) => {
@@ -63,10 +72,10 @@ const createLi = (i) => {
   li.append(dueDate);
   li.append(id);
 
-  const delBtn = createBtn('DEL');
+  const delBtn = ButtonFactory('DEL');
   li.append(delBtn);
 
-  const editBtn = createBtn('EDIT');
+  const editBtn = ButtonFactory('EDIT');
   li.append(editBtn);
   console.log('li created');
   return li;
@@ -91,25 +100,36 @@ const createInput = (type, name) => {
 
 const createList = () => {
   const ul = document.createElement('ul');
-  ul.addEventListener('click', (e) => {
-    console.log(e.target);
-    if (e.target.id === 'EDIT-btn') {
-      showEditField(e);
-    } else if (e.target.id === 'SAVE-btn') {
-      handleEdit(e);
-    
-    } else if (e.target.id === 'DEL-btn') {
-      handleDel(e);
-    
-    } else if (e.target.id === 'CANCEL-btn') {
-      removeEditField(e);
-    }
-  });
+
+  // //event delegation for buttons within li element
+  // ul.addEventListener('click', (e) => {
+  //   console.log(e.target);
+  //   if (e.target.id === 'EDIT-btn') {
+  //     showEditField(e);
+  //   } else if (e.target.id === 'SAVE-btn') {
+  //     handleEdit(e);
+  //   } else if (e.target.id === 'DEL-btn') {
+  //     handleDel(e);
+  //   } else if (e.target.id === 'CANCEL-btn') {
+  //     removeEditField(e);
+  //   }
+  // });
+
+  //retrieve data list and render it
   const list = getFromLocalStorage();
-  list.slice().reverse().forEach((item, i) => {
-    ul.append(createLi(i));
-  });
+  list
+    .slice()
+    .reverse()
+    .forEach((item, i) => {
+      ul.append(createLi(i));
+    });
   document.body.append(ul);
+};
+
+const reset = () => {
+  clearLocalStorage();
+  clearList();
+  createList();
 };
 
 const clearList = () => {
@@ -131,9 +151,9 @@ const showEditField = (e) => {
   e.target.parentElement.append(editField.input);
   e.target.parentElement.append(dateField.input);
   console.log(`edit field ${editField.input}`);
-  const saveBtn = createBtn('SAVE', handleEdit);
+  const saveBtn = ButtonFactory('SAVE', handleEdit);
   e.target.parentElement.append(saveBtn);
-  const cancelBtn = createBtn('CANCEL', removeEditField);
+  const cancelBtn = ButtonFactory('CANCEL', removeEditField);
   e.target.parentElement.append(cancelBtn);
   document.querySelector('#SAVE-btn').setAttribute('disabled', '');
   // }
@@ -157,12 +177,13 @@ const autoToggleSave = (e) => {
 };
 
 export {
-  component,
+  header,
   createInput,
   createLi,
-  createBtn,
   createList,
   clearList,
   clearLocalStorage,
   autoToggleSave,
+  showEditField,
+  removeEditField,
 };
