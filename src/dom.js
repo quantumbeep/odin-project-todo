@@ -1,12 +1,6 @@
 import { add } from 'lodash';
 import Icon from './ice.jpg';
-import {
-  checkChange,
-  getFromLocalStorage,
-  handleAdd,
-  handleDel,
-  handleEdit,
-} from './logic.mjs';
+import { checkChange, getFromLocalStorage } from './logic.mjs';
 
 const header = () => {
   const header = document.createElement('header');
@@ -21,12 +15,14 @@ const header = () => {
   //--Use the button factory--
   // 1. Make a button object first
   const addItemBtn = ButtonFactory('ADD');
+  const resetBtn = ButtonFactory('RESET');
   // 2. Call function on the btn object
   mainForm.append(addItemBtn);
+  mainForm.append(resetBtn);
   // mainForm.append(btn.createBtn('RESET'));
 
   // 3. Select the button using automatically created class
-  //4. Add an event listener to it
+  // 4. Add an event listener to it
   // document.querySelector('.ADD').addEventListener('click', handleAdd);
   // document.querySelector('.RESET').addEventListener('click', reset);
 
@@ -49,18 +45,19 @@ const ButtonFactory = (name) => {
 
 const createLi = (i) => {
   const li = document.createElement('li');
-  if (i) {
-    li.classList.add(`li-${i}`, 'li');
-  } else {
-    li.classList.add('li');
-  }
   const btnContainer = document.createElement('div');
   const dataContainer = document.createElement('div');
-
-  const list = getFromLocalStorage();
   const id = document.createElement('p');
   const toDo = document.createElement('p');
   const dueDate = document.createElement('p');
+  const delBtn = ButtonFactory('DEL');
+  const editBtn = ButtonFactory('EDIT');
+
+  li.classList.add(`li-${i}`, 'li');
+  li.classList.add('li');
+
+  const list = getFromLocalStorage();
+
   li.setAttribute('id', list[i].dateCreated);
   id.classList.add('item-id');
   toDo.classList.add('item-text');
@@ -68,15 +65,15 @@ const createLi = (i) => {
   id.textContent = `ID: ${list[i].dateCreated}`;
   toDo.textContent = `To Do: ${list[i].toDoText}`;
   dueDate.textContent = `Due Date: ${list[i].dueDate}`;
-  li.append(toDo);
-  li.append(dueDate);
-  li.append(id);
 
-  const delBtn = ButtonFactory('DEL');
-  li.append(delBtn);
+  li.append(btnContainer);
+  li.append(dataContainer);
+  dataContainer.append(toDo);
+  dataContainer.append(dueDate);
+  dataContainer.append(id);
+  btnContainer.append(delBtn);
+  btnContainer.append(editBtn);
 
-  const editBtn = ButtonFactory('EDIT');
-  li.append(editBtn);
   console.log('li created');
   return li;
 };
@@ -100,20 +97,6 @@ const createInput = (type, name) => {
 
 const createList = () => {
   const ul = document.createElement('ul');
-
-  // //event delegation for buttons within li element
-  // ul.addEventListener('click', (e) => {
-  //   console.log(e.target);
-  //   if (e.target.id === 'EDIT-btn') {
-  //     showEditField(e);
-  //   } else if (e.target.id === 'SAVE-btn') {
-  //     handleEdit(e);
-  //   } else if (e.target.id === 'DEL-btn') {
-  //     handleDel(e);
-  //   } else if (e.target.id === 'CANCEL-btn') {
-  //     removeEditField(e);
-  //   }
-  // });
 
   //retrieve data list and render it
   const list = getFromLocalStorage();
@@ -146,17 +129,21 @@ const showEditField = (e) => {
   //dom create input field - text, due date
   // if(e.target && e.target.id == 'EDIT-btn'){
 
+  //disable all other edit and del buttons when editing an item
+  const allEditBtns = document.querySelectorAll('.EDIT');
+  const allDelBtns = document.querySelectorAll('.DEL');
+  allEditBtns.forEach((element) => element.setAttribute('disabled', ''));
+  allDelBtns.forEach((element) => element.setAttribute('disabled', ''));
+
+  //create and show the edit input fields
   const editField = createInput('text', 'edit');
   const dateField = createInput('date', 'newDue');
+  const saveBtn = ButtonFactory('SAVE');
+  const cancelBtn = ButtonFactory('CANCEL');
   e.target.parentElement.append(editField.input);
   e.target.parentElement.append(dateField.input);
-  console.log(`edit field ${editField.input}`);
-  const saveBtn = ButtonFactory('SAVE', handleEdit);
   e.target.parentElement.append(saveBtn);
-  const cancelBtn = ButtonFactory('CANCEL', removeEditField);
   e.target.parentElement.append(cancelBtn);
-  document.querySelector('#SAVE-btn').setAttribute('disabled', '');
-  // }
 };
 
 const removeEditField = () => {
@@ -186,4 +173,5 @@ export {
   autoToggleSave,
   showEditField,
   removeEditField,
+  reset,
 };
