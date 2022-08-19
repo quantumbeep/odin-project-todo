@@ -5,32 +5,23 @@ import { checkChange, getFromLocalStorage } from './logic.mjs';
 const header = () => {
   const header = document.createElement('header');
   const mainForm = document.createElement('form');
-  header.classList.add('header');
-  mainForm.classList.add('main-form');
-  header.append(mainForm);
-  // Add the image to our existing div.
-  const myIcon = new Image();
-  myIcon.src = Icon;
-
-  //--Use the button factory--
-  // 1. Make a button object first
-  const addItemBtn = ButtonFactory('ADD');
-  const resetBtn = ButtonFactory('RESET');
-  // 2. Call function on the btn object
-  mainForm.append(addItemBtn);
-  mainForm.append(resetBtn);
-  // mainForm.append(btn.createBtn('RESET'));
-
-  // 3. Select the button using automatically created class
-  // 4. Add an event listener to it
-  // document.querySelector('.ADD').addEventListener('click', handleAdd);
-  // document.querySelector('.RESET').addEventListener('click', reset);
-
   const text = createInput('text', 'todo');
   const date = createInput('date', 'date');
+  const addItemBtn = ButtonFactory('ADD');
+  const resetBtn = ButtonFactory('RESET');
+  header.classList.add('header');
+  mainForm.classList.add('main-form');
+
+  // const myIcon = new Image();
+  // myIcon.src = Icon;
+  // header.append(myIcon);
+
+  header.append(mainForm);
+  mainForm.append(addItemBtn);
+  mainForm.append(resetBtn);
   mainForm.append(text.input);
-  mainForm.append(date.input);
   mainForm.append(text.label);
+  mainForm.append(date.input);
   mainForm.append(date.label);
   return header;
 };
@@ -43,7 +34,7 @@ const ButtonFactory = (name) => {
   return buttonEl;
 };
 
-const createLi = (i) => {
+const createLi = (item, list) => {
   const li = document.createElement('li');
   const btnContainer = document.createElement('div');
   const dataContainer = document.createElement('div');
@@ -53,21 +44,22 @@ const createLi = (i) => {
   const delBtn = ButtonFactory('DEL');
   const editBtn = ButtonFactory('EDIT');
 
-  li.classList.add(`li-${i}`, 'li');
+  // li.classList.add(`li-${i}`, 'li');
   li.classList.add('li');
+  btnContainer.classList.add('li-btn-container')
+  dataContainer.classList.add('li-data-container')
 
-  const list = getFromLocalStorage();
-
-  li.setAttribute('id', list[i].dateCreated);
+  // li.setAttribute('id', list[i].dateCreated);
+  li.setAttribute('id', item.dateCreated);
   id.classList.add('item-id');
   toDo.classList.add('item-text');
   dueDate.classList.add('item-due');
-  id.textContent = `ID: ${list[i].dateCreated}`;
-  toDo.textContent = `To Do: ${list[i].toDoText}`;
-  dueDate.textContent = `Due Date: ${list[i].dueDate}`;
+  id.textContent = `ID: ${item.dateCreated}`;
+  toDo.textContent = `PROJECT: ${item.toDoText}`;
+  dueDate.textContent = `Due Date: ${item.dueDate}`;
 
-  li.append(btnContainer);
   li.append(dataContainer);
+  li.append(btnContainer);
   dataContainer.append(toDo);
   dataContainer.append(dueDate);
   dataContainer.append(id);
@@ -77,8 +69,6 @@ const createLi = (i) => {
   console.log('li created');
   return li;
 };
-
-const setInputVal = () => {};
 
 const createInput = (type, name) => {
   const input = document.createElement('input');
@@ -97,16 +87,17 @@ const createInput = (type, name) => {
 
 const createList = () => {
   const ul = document.createElement('ul');
+  document.body.append(ul);
 
   //retrieve data list and render it
   const list = getFromLocalStorage();
-  list
-    .slice()
-    .reverse()
-    .forEach((item, i) => {
-      ul.append(createLi(i));
-    });
-  document.body.append(ul);
+  const copyList = list.slice()
+  console.log(copyList);
+  copyList.reverse().forEach(function(item) {
+    const li = createLi(item, copyList);
+    console.log(copyList.indexOf(item));
+    ul.append(li)
+  });
 };
 
 const reset = () => {
@@ -162,6 +153,11 @@ const autoToggleSave = (e) => {
     document.querySelector('#SAVE-btn').removeAttribute('disabled');
   }
 };
+
+
+const viewProject = () => {
+
+}
 
 export {
   header,
