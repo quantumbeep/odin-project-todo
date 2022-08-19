@@ -1,11 +1,11 @@
 import { indexOf, update } from 'lodash';
-import {
-  autoToggleSave,
-  clearList,
-  createBtn,
-  createInput,
-  createList,
-} from './dom.js';
+import { clearList, createList } from './dom.js';
+
+const clearInputs = () => {
+  document.querySelector('.input-todo').value = '';
+  document.querySelector('.input-date').value = '';
+  console.log('value set');
+};
 
 const receiveItemData = () => {
   const toDoText = document.querySelector('.input-text').value;
@@ -29,10 +29,9 @@ const addItemToList = (item, list) => {
 };
 
 const delItemFromList = (e, list) => {
-  const delTarget = e.target.parentElement.id;
-  console.log(delTarget);
+  const delTarget = e.target.closest('li').id;
+  console.log({ delTarget });
   console.log(typeof delTarget);
-  // list.splice(delTarget, 1);
   const filteredList = list.filter(
     (item) => item.dateCreated.toString() !== delTarget
   );
@@ -42,7 +41,7 @@ const delItemFromList = (e, list) => {
 
 const editItem = (e, newData, list) => {
   //change the value of 'toDoText' property in toDoItem
-  const editTarget = e.target.parentElement.id;
+  const editTarget = e.target.closest('li').id;
   const foundItem = list.find(
     (item) => item.dateCreated.toString() === editTarget
   );
@@ -64,10 +63,11 @@ const saveToLocalStorage = (modifiedList) => {
 const getFromLocalStorage = () => {
   const data = localStorage.getItem('list') || '[]';
   console.log('retrieved list from local');
-  return JSON.parse(data);
+  const cleanData = JSON.parse(data);
+  return cleanData;
 };
 
-const handleAdd = (e) => {
+const handleAdd = () => {
   //receive the data into obj
   const itemData = receiveItemData();
 
@@ -89,8 +89,6 @@ const handleAdd = (e) => {
 };
 
 const handleDel = (e) => {
-  e.preventDefault();
-
   //retrieve list from local storage
   const list = getFromLocalStorage();
 
@@ -105,22 +103,6 @@ const handleDel = (e) => {
 
   //re-render list
   createList();
-};
-
-const checkChange = (e) => {
-  const itemContent =
-    e.target.parentElement.querySelector('.item-text').textContent;
-  const targetContent = e.target.value;
-  return itemContent === targetContent || false;
-};
-
-const getNewData = () => {
-  const edit = document.querySelector('.input-edit');
-  const due = document.querySelector('.input-newDue');
-  return {
-    toDoText: edit.value,
-    dueDate: due.value,
-  };
 };
 
 const handleEdit = (e) => {
@@ -147,6 +129,22 @@ const handleEdit = (e) => {
   alert('Item edited successfully');
 };
 
+const checkChange = (e) => {
+  const itemContent =
+    e.target.parentElement.querySelector('.item-text').textContent;
+  const targetContent = e.target.value;
+  return itemContent === targetContent || false;
+};
+
+const getNewData = () => {
+  const edit = document.querySelector('.input-edit');
+  const due = document.querySelector('.input-newDue');
+  return {
+    toDoText: edit.value,
+    dueDate: due.value,
+  };
+};
+
 export {
   receiveItemData,
   addItemToList,
@@ -155,4 +153,5 @@ export {
   handleDel,
   handleEdit,
   checkChange,
+  clearInputs,
 };
