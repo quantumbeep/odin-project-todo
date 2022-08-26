@@ -1,11 +1,11 @@
-import { add } from 'lodash';
+import { add, isArray } from 'lodash';
 import Icon from './ice.jpg';
 import { checkChange, getFromLocalStorage } from './logic.mjs';
 
 const header = () => {
   const header = document.createElement('header');
   const mainForm = document.createElement('form');
-  const text = createInput('text', 'todo');
+  const text = createInput('text', 'project');
   const date = createInput('date', 'date');
   const addItemBtn = ButtonFactory('ADD');
   const resetBtn = ButtonFactory('RESET');
@@ -17,12 +17,13 @@ const header = () => {
   // header.append(myIcon);
 
   header.append(mainForm);
-  mainForm.append(addItemBtn);
-  mainForm.append(resetBtn);
+
   mainForm.append(text.input);
   mainForm.append(text.label);
   mainForm.append(date.input);
   mainForm.append(date.label);
+  mainForm.append(addItemBtn);
+  mainForm.append(resetBtn);
   return header;
 };
 
@@ -39,32 +40,34 @@ const createLi = (item, list) => {
   const btnContainer = document.createElement('div');
   const dataContainer = document.createElement('div');
   const id = document.createElement('p');
-  const toDo = document.createElement('p');
+  const project = document.createElement('p');
   const dueDate = document.createElement('p');
+  const addTaskBtn = ButtonFactory('ADD');
   const delBtn = ButtonFactory('DEL');
   const editBtn = ButtonFactory('EDIT');
 
-  // li.classList.add(`li-${i}`, 'li');
+  const index = list.indexOf(item);
+  li.classList.add(`li-${index}`, 'li');
   li.classList.add('li');
-  btnContainer.classList.add('li-btn-container')
-  dataContainer.classList.add('li-data-container')
+  btnContainer.classList.add('li-btn-container');
+  dataContainer.classList.add('li-data-container');
 
-  // li.setAttribute('id', list[i].dateCreated);
   li.setAttribute('id', item.dateCreated);
   id.classList.add('item-id');
-  toDo.classList.add('item-text');
+  project.classList.add('item-project');
   dueDate.classList.add('item-due');
+  project.textContent = item.projectText;
+  dueDate.textContent = item.dueDate
   id.textContent = `ID: ${item.dateCreated}`;
-  toDo.textContent = `PROJECT: ${item.toDoText}`;
-  dueDate.textContent = `Due Date: ${item.dueDate}`;
 
   li.append(dataContainer);
   li.append(btnContainer);
-  dataContainer.append(toDo);
+  dataContainer.append(project);
   dataContainer.append(dueDate);
   dataContainer.append(id);
   btnContainer.append(delBtn);
   btnContainer.append(editBtn);
+  btnContainer.append(addTaskBtn);
 
   console.log('li created');
   return li;
@@ -91,12 +94,15 @@ const createList = () => {
 
   //retrieve data list and render it
   const list = getFromLocalStorage();
-  const copyList = list.slice()
+  const copyList = list.slice();
   console.log(copyList);
-  copyList.reverse().forEach(function(item) {
-    const li = createLi(item, copyList);
-    console.log(copyList.indexOf(item));
-    ul.append(li)
+
+  copyList.reverse().forEach(function (item) {
+    if (item.projectText) {
+      const li = createLi(item, list);
+      console.log(copyList.indexOf(item));
+      ul.append(li);
+    }
   });
 };
 
@@ -117,9 +123,6 @@ const clearLocalStorage = () => {
 };
 
 const showEditField = (e) => {
-  //dom create input field - text, due date
-  // if(e.target && e.target.id == 'EDIT-btn'){
-
   //disable all other edit and del buttons when editing an item
   const allEditBtns = document.querySelectorAll('.EDIT');
   const allDelBtns = document.querySelectorAll('.DEL');
@@ -127,14 +130,30 @@ const showEditField = (e) => {
   allDelBtns.forEach((element) => element.setAttribute('disabled', ''));
 
   //create and show the edit input fields
+  const editForm = document.createElement('form');
+  const parentLi = e.target.closest('li');
+  const childRef = e.target.closest('div');
+  console.log(e.target.closest('div'));
+  parentLi.insertBefore(editForm, childRef);
+  editForm.setAttribute('position', 'absolute');
+  editForm.style.zIndex = '1';
+  // e.target.parentElement.append(editForm);
   const editField = createInput('text', 'edit');
+  editField.input.setAttribute('value', 'hi');
   const dateField = createInput('date', 'newDue');
   const saveBtn = ButtonFactory('SAVE');
   const cancelBtn = ButtonFactory('CANCEL');
-  e.target.parentElement.append(editField.input);
-  e.target.parentElement.append(dateField.input);
-  e.target.parentElement.append(saveBtn);
-  e.target.parentElement.append(cancelBtn);
+  console.log(e.target.closest('li').querySelector('.item-project').innerHTML);
+  editField.input.value = e.target
+    .closest('li')
+    .querySelector('.item-project').innerHTML;
+  dateField.input.value = e.target
+    .closest('li')
+    .querySelector('.item-due').innerHTML;
+  editForm.append(editField.input);
+  editForm.append(saveBtn);
+  editForm.append(dateField.input);
+  editForm.append(cancelBtn);
 };
 
 const removeEditField = () => {
@@ -154,10 +173,7 @@ const autoToggleSave = (e) => {
   }
 };
 
-
-const viewProject = () => {
-
-}
+const viewProject = () => {};
 
 export {
   header,
