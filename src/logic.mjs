@@ -14,40 +14,54 @@ const receiveItemData = (e) => {
   console.log(document.querySelector('.input-date').value);
   console.log(Date.parse(document.querySelector('.input-date').value));
   const dueDate = document.querySelector('.input-date').value;
-  // const dueDate = format(parseISO(document.querySelector('.input-date').value), 'EEEE, MMM do, yyyy');
   console.log('received project item data from inputs');
   const dateCreated = Date.now();
-  const emptyTaskList = [];
-  const taskList = {
-    task: 'example task 1',
-    taskID: Date.now(),
-  };
+  const taskList = [];
+  const taskText = document.querySelector('.input-task').value;
 
   console.log(e.target.parentElement);
   console.log(e.target.parentElement.querySelector('input:first-of-type').id);
   const receiveTarget = e.target.parentElement.querySelector(
     'input:first-of-type'
   ).id;
+  console.log(e.target.classList);
 
   if (projectText && dueDate && receiveTarget === 'input-project') {
     return {
       projectText,
       dueDate,
       dateCreated,
-      emptyTaskList,
+      taskList,
     };
   } else if (receiveTarget === 'input-task') {
     return {
-      taskList,
+      taskText,
+      dateCreated
     };
   } else {
     alert('Please complete the missing fields...');
   }
 };
 
-const addItemToList = (item, list) => {
-  list.push(item);
-  console.log('added to array');
+const addItemToList = (e, item, list) => {
+  //if event origination (aka which ADD button was clicked)
+  //is ADD btn within ul>li then push the item to tasklist
+  const targetAddBtn = e.target;
+  if (targetAddBtn.classList.contains('add-task-btn')) {
+    const addTarget = e.target.closest('li').id;
+
+    const foundItem = list.find(
+      (item) => item.dateCreated.toString() === addTarget
+    );
+    const targetIndex = list.indexOf(foundItem);
+    const targetTaskList = list[targetIndex].taskList;
+    // const { taskText } = item;
+    targetTaskList.push(item);
+  } else {
+    //else push to list
+    list.push(item);
+    console.log('added to array');
+  }
 };
 
 const delItemFromList = (e, list) => {
@@ -102,7 +116,7 @@ const handleAdd = (e) => {
     return;
   } else {
     //push obj to array 'list' - 'list' is now modified and ready to store
-    addItemToList(itemData, list);
+    addItemToList(e, itemData, list);
 
     //store array in local storage (stringify it first)
     saveToLocalStorage(list);
@@ -170,7 +184,7 @@ const getNewData = () => {
   const due = document.querySelector('.input-newDue');
   return {
     projectText: edit.value,
-    dueDate: due.value
+    dueDate: due.value,
   };
 };
 

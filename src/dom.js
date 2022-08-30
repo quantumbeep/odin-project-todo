@@ -46,6 +46,7 @@ const createLi = (item, list) => {
   const addTaskBtn = ButtonFactory('ADD');
   const delBtn = ButtonFactory('DEL');
   const editBtn = ButtonFactory('EDIT');
+  const taskQuickInput = createInput('text', 'task')
 
   const index = list.indexOf(item);
   li.classList.add(`li-${index}`, 'li');
@@ -59,10 +60,11 @@ const createLi = (item, list) => {
   dueDate.classList.add('item-due');
   project.textContent = item.projectText;
   dueDate.textContent = format(parseISO(item.dueDate), 'EEEE, MMM do, yyyy');
-  // dueDate.textContent = item.dueDate;
   id.textContent = `ID: ${item.dateCreated}`;
+  addTaskBtn.classList.add('add-task-btn')
 
   li.append(dataContainer);
+  li.append(btnContainer);
   li.append(btnContainer);
   dataContainer.append(project);
   dataContainer.append(dueDate);
@@ -70,6 +72,8 @@ const createLi = (item, list) => {
   btnContainer.append(delBtn);
   btnContainer.append(editBtn);
   btnContainer.append(addTaskBtn);
+  btnContainer.append(taskQuickInput.input);
+  
 
   console.log('li created');
   return li;
