@@ -1,3 +1,4 @@
+import { format, parseISO } from 'date-fns';
 import { add, isArray } from 'lodash';
 import Icon from './ice.jpg';
 import { checkChange, getFromLocalStorage } from './logic.mjs';
@@ -57,7 +58,8 @@ const createLi = (item, list) => {
   project.classList.add('item-project');
   dueDate.classList.add('item-due');
   project.textContent = item.projectText;
-  dueDate.textContent = item.dueDate;
+  dueDate.textContent = format(parseISO(item.dueDate), 'EEEE, MMM do, yyyy');
+  // dueDate.textContent = item.dueDate;
   id.textContent = `ID: ${item.dateCreated}`;
 
   li.append(dataContainer);
@@ -97,7 +99,7 @@ const createList = () => {
   const copyList = list.slice();
   console.log(copyList);
 
-  copyList.reverse().forEach(function (item) {
+  copyList.reverse().forEach((item) => {
     if (item.projectText) {
       const li = createLi(item, list);
       console.log(copyList.indexOf(item));
@@ -124,9 +126,10 @@ const clearLocalStorage = () => {
 
 const showEditField = (e) => {
   //disable all other edit and del buttons when editing an item
-  const notSaveCancelBtns = document.querySelectorAll('button:not(.SAVE-btn, .CANCEL-btn)');
+  const notSaveCancelBtns = document.querySelectorAll(
+    'button:not(.SAVE-btn, .CANCEL-btn)'
+  );
   notSaveCancelBtns.forEach((element) => element.setAttribute('disabled', ''));
-
 
   //create and show the edit input fields
   const editForm = document.createElement('form');
@@ -156,8 +159,8 @@ const showEditField = (e) => {
 };
 
 const removeEditField = () => {
-const allDisabledBtns = document.querySelector('button:([disabled])')
-allDisabledBtns.setAttribute('disabled', false)
+  const allDisabledBtns = document.querySelector('button:([disabled])');
+  allDisabledBtns.setAttribute('disabled', false);
   clearList();
   createList();
 };

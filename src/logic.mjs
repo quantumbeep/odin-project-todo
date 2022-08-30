@@ -1,6 +1,6 @@
+import { format, parseISO } from 'date-fns';
 import { indexOf, update } from 'lodash';
 import { clearList, createList } from './dom.js';
-import { format, parseISO } from 'date-fns';
 
 const clearInputs = () => {
   document.querySelector('.input-project').value = '';
@@ -10,10 +10,11 @@ const clearInputs = () => {
 
 const receiveItemData = (e) => {
   const projectText = document.querySelector('.input-project').value;
-  console.log(typeof document.querySelector('.input-date').value)
-  console.log(document.querySelector('.input-date').value)
-  console.log(Date.parse(document.querySelector('.input-date').value))
-  const dueDate = format(parseISO(document.querySelector('.input-date').value), 'EEEE, MMM do, yyyy');
+  console.log(typeof document.querySelector('.input-date').value);
+  console.log(document.querySelector('.input-date').value);
+  console.log(Date.parse(document.querySelector('.input-date').value));
+  const dueDate = document.querySelector('.input-date').value;
+  // const dueDate = format(parseISO(document.querySelector('.input-date').value), 'EEEE, MMM do, yyyy');
   console.log('received project item data from inputs');
   const dateCreated = Date.now();
   const emptyTaskList = [];
@@ -169,7 +170,7 @@ const getNewData = () => {
   const due = document.querySelector('.input-newDue');
   return {
     projectText: edit.value,
-    dueDate: format(parseISO(due.value), 'EEEE, MMM do, yyyy'),
+    dueDate: due.value
   };
 };
 
