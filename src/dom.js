@@ -57,7 +57,7 @@ const createLi = (item, list) => {
   project.classList.add('item-project');
   dueDate.classList.add('item-due');
   project.textContent = item.projectText;
-  dueDate.textContent = item.dueDate
+  dueDate.textContent = item.dueDate;
   id.textContent = `ID: ${item.dateCreated}`;
 
   li.append(dataContainer);
@@ -124,10 +124,9 @@ const clearLocalStorage = () => {
 
 const showEditField = (e) => {
   //disable all other edit and del buttons when editing an item
-  const allEditBtns = document.querySelectorAll('.EDIT');
-  const allDelBtns = document.querySelectorAll('.DEL');
-  allEditBtns.forEach((element) => element.setAttribute('disabled', ''));
-  allDelBtns.forEach((element) => element.setAttribute('disabled', ''));
+  const notSaveCancelBtns = document.querySelectorAll('button:not(.SAVE-btn, .CANCEL-btn)');
+  notSaveCancelBtns.forEach((element) => element.setAttribute('disabled', ''));
+
 
   //create and show the edit input fields
   const editForm = document.createElement('form');
@@ -139,11 +138,11 @@ const showEditField = (e) => {
   editForm.style.zIndex = '1';
   // e.target.parentElement.append(editForm);
   const editField = createInput('text', 'edit');
-  editField.input.setAttribute('value', 'hi');
   const dateField = createInput('date', 'newDue');
   const saveBtn = ButtonFactory('SAVE');
   const cancelBtn = ButtonFactory('CANCEL');
   console.log(e.target.closest('li').querySelector('.item-project').innerHTML);
+  console.log(e.target.closest('li').querySelector('.item-due').innerHTML);
   editField.input.value = e.target
     .closest('li')
     .querySelector('.item-project').innerHTML;
@@ -157,6 +156,8 @@ const showEditField = (e) => {
 };
 
 const removeEditField = () => {
+const allDisabledBtns = document.querySelector('button:([disabled])')
+allDisabledBtns.setAttribute('disabled', false)
   clearList();
   createList();
 };
