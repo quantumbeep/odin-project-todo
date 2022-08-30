@@ -46,7 +46,19 @@ const createLi = (item, list) => {
   const addTaskBtn = ButtonFactory('ADD');
   const delBtn = ButtonFactory('DEL');
   const editBtn = ButtonFactory('EDIT');
-  const taskQuickInput = createInput('text', 'task')
+  const taskQuickInput = createInput('text', 'task');
+
+  //quick display of most recent 3 tasks added
+  const previewTaskList = document.createElement('ul');
+  previewTaskList.classList.add('preview-list');
+  const task1 = document.createElement('li');
+  const task2 = document.createElement('li');
+  const task3 = document.createElement('li');
+  task1.textContent = item.taskList[0]?.taskText || 'nada';
+  task2.textContent = item.taskList[1]?.taskText || 'nada';
+  task3.textContent = item.taskList[2]?.taskText || 'nada';
+  dataContainer.append(previewTaskList);
+  previewTaskList.append(task1, task2, task3);
 
   const index = list.indexOf(item);
   li.classList.add(`li-${index}`, 'li');
@@ -61,7 +73,7 @@ const createLi = (item, list) => {
   project.textContent = item.projectText;
   dueDate.textContent = format(parseISO(item.dueDate), 'EEEE, MMM do, yyyy');
   id.textContent = `ID: ${item.dateCreated}`;
-  addTaskBtn.classList.add('add-task-btn')
+  addTaskBtn.classList.add('add-task-btn');
 
   li.append(dataContainer);
   li.append(btnContainer);
@@ -73,7 +85,6 @@ const createLi = (item, list) => {
   btnContainer.append(editBtn);
   btnContainer.append(addTaskBtn);
   btnContainer.append(taskQuickInput.input);
-  
 
   console.log('li created');
   return li;
