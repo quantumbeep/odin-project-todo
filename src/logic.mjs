@@ -16,8 +16,7 @@ const receiveItemData = (e) => {
   const dueDate = document.querySelector('.input-date').value;
   console.log('received project item data from inputs');
   const dateCreated = Date.now();
-  const taskList = [];
-  const taskText = document.querySelector('.input-task').value;
+ 
 
   console.log(e.target.parentElement);
   console.log(e.target.parentElement.querySelector('input:first-of-type').id);
@@ -27,6 +26,8 @@ const receiveItemData = (e) => {
   console.log(e.target.classList);
 
   if (projectText && dueDate && receiveTarget === 'input-project') {
+    const taskList = [];
+
     return {
       projectText,
       dueDate,
@@ -34,6 +35,7 @@ const receiveItemData = (e) => {
       taskList,
     };
   } else if (receiveTarget === 'input-task') {
+    const taskText = document.querySelector('.input-task').value;
     return {
       taskText,
       dateCreated
@@ -104,6 +106,8 @@ const getFromLocalStorage = () => {
 };
 
 const handleAdd = (e) => {
+
+  e.preventDefault()
   //receive the data into obj
 
   const itemData = receiveItemData(e);
@@ -170,13 +174,19 @@ const handleEdit = (e) => {
   alert('Item edited successfully');
 };
 
-const checkChange = (e) => {
-  console.log(e.target.closest('li').querySelector('.item-project'));
+const isSame = (e) => {
   const oldContent = e.target
-    .closest('li')
-    .querySelector('.item-project').textContent;
-  const targetContent = e.target.value;
-  return oldContent === targetContent || false;
+  .closest('li')
+  .querySelector('.item-project').textContent;
+  console.log(oldContent);
+  const editFieldContent = e.target.value;
+  console.log('check change');
+  console.log(editFieldContent);
+  if(oldContent !== editFieldContent){
+    return false
+  } else {
+    return true
+  }
 };
 
 const getNewData = () => {
@@ -195,6 +205,6 @@ export {
   handleAdd,
   handleDel,
   handleEdit,
-  checkChange,
+  isSame,
   clearInputs,
 };

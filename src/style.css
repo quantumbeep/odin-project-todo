@@ -16,37 +16,30 @@ body {
   width: 100%;
 }
 header {
-  background-color: rgb(129, 89, 167);
-  /* background: url('./ice.jpg'); */
+  background-color: rgb(72, 138, 214);
   display: flex;
   flex-direction: column;
-  padding: 10px
-}
-
-header div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  place-items: center;
+  margin: 0.5rem;
 }
 
 button {
   background: rgb(0, 56, 135);
   color: white;
-  outline: 1px outset rgb(0, 0, 0);
-  border-radius: 10px;
+  border: 1px outset rgb(117, 177, 255);
+  border-radius: 100px;
   margin: 2px;
-  padding: 0px 10px;
-  font-size: 20px;
-  transition: ease-in-out 0.2s;
+  padding: 0px 1rem;
+  font-size: 15px;
+  transition: ease-in-out 0.1s;
   align-items: center;
   place-content: center;
+  cursor: pointer;
 }
 
 button:hover {
@@ -60,23 +53,20 @@ button:hover {
 }
 
 input {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
+  width: 30%;
   height: 3rem;
   border: 1px solid black;
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: 20px;
   color: rgb(0, 0, 0);
-  padding: 0px 10px;
   align-items: center;
   justify-content: center;
+  text-align: center;
 }
 
 li input {
-  background-color: aquamarine;
   height: 2rem;
-  width: max-content;
+  /* width: max-content; */
   border: 1px solid black;
   border-radius: 5px;
   font-size: 12px;
@@ -88,53 +78,52 @@ label {
 }
 
 ul {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: start;
-  padding: 0;
-  background-color: rgb(69, 58, 58);
-  height: 100vh;
-  width: 100%;
+  background-color: rgb(255, 255, 255);
+  display: grid;
+  grid-template-columns: 1fr;
+  place-items: center;
+  /* height: 100vh; */
 }
 
 .li-data-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: start;
-  width: 400px;
-  padding-left: 15px;
+  display: grid;
+  grid-auto-rows: 1fr;
+  background-color: transparent;
+  place-self: start;
+  min-width: none;
 }
 
 .li-btn-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: end;
-  width: 50%;
-  padding-right: 5px;
-}
-
-li {
-  display: flex;
-  flex-direction: row;
-  background: rgb(184, 167, 167);
-  border: #333 1px solid;
-  border-radius: 10px;
-  width: 90%;
-  height: 120px;
-  margin-top: 10px;
-}
-
-li:hover {
-  background: rgb(255, 255, 255);
-  cursor: pointer;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  place-self: center center;
 }
 
 li p {
-  margin: 0;
-  padding: 0;
+  font-size: 12px;
+}
+li p:nth-child(3) {
+  place-self: end start;
+  font-size: 8px;
+  grid-row: 6;
+}
+li {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background: rgb(184, 167, 167);
+  border: #333 1px solid;
+  border-radius: 5px;
+  width: 90%;
+  height: auto;
+  margin-top: 0.5rem;
+  place-items: center;
+  padding: 0.5rem;
+}
+
+li:hover {
+  background: rgb(216, 195, 195);
+  cursor: pointer;
 }
 
 li form {
@@ -142,5 +131,22 @@ li form {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   place-items: space-between;
-  
+}
+
+ul.preview-list {
+  background: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  place-self: center start;
+  min-width: 150px;
+  max-width:max-content;
+}
+ul.preview-list li {
+  display: flex;
+  background: rgb(9, 31, 50);
+  height: auto;
+  color: rgb(235, 173, 92);
+  padding: 0.2rem;
+  margin: 0;
 }

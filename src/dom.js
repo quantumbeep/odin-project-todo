@@ -1,7 +1,7 @@
 import { format, parseISO } from 'date-fns';
 import { add, isArray } from 'lodash';
 import Icon from './ice.jpg';
-import { checkChange, getFromLocalStorage } from './logic.mjs';
+import { getFromLocalStorage, isSame } from './logic.mjs';
 
 const header = () => {
   const header = document.createElement('header');
@@ -12,10 +12,6 @@ const header = () => {
   const resetBtn = ButtonFactory('RESET');
   header.classList.add('header');
   mainForm.classList.add('main-form');
-
-  // const myIcon = new Image();
-  // myIcon.src = Icon;
-  // header.append(myIcon);
 
   header.append(mainForm);
 
@@ -48,7 +44,7 @@ const createLi = (item, list) => {
   const editBtn = ButtonFactory('EDIT');
   const taskQuickInput = createInput('text', 'task');
 
-  //quick display of most recent 3 tasks added
+  //preview of most recent 3 tasks added
   const previewTaskList = document.createElement('ul');
   previewTaskList.classList.add('preview-list');
   const task1 = document.createElement('li');
@@ -57,7 +53,6 @@ const createLi = (item, list) => {
   task1.textContent = item.taskList[0]?.taskText || 'nada';
   task2.textContent = item.taskList[1]?.taskText || 'nada';
   task3.textContent = item.taskList[2]?.taskText || 'nada';
-  dataContainer.append(previewTaskList);
   previewTaskList.append(task1, task2, task3);
 
   const index = list.indexOf(item);
@@ -76,7 +71,7 @@ const createLi = (item, list) => {
   addTaskBtn.classList.add('add-task-btn');
 
   li.append(dataContainer);
-  li.append(btnContainer);
+  li.append(previewTaskList);
   li.append(btnContainer);
   dataContainer.append(project);
   dataContainer.append(dueDate);
@@ -119,6 +114,7 @@ const createList = () => {
       const li = createLi(item, list);
       console.log(copyList.indexOf(item));
       ul.append(li);
+    } else {
     }
   });
 };
@@ -140,11 +136,7 @@ const clearLocalStorage = () => {
 };
 
 const showEditField = (e) => {
-  //disable all other edit and del buttons when editing an item
-  const notSaveCancelBtns = document.querySelectorAll(
-    'button:not(.SAVE-btn, .CANCEL-btn)'
-  );
-  notSaveCancelBtns.forEach((element) => element.setAttribute('disabled', ''));
+ 
 
   //create and show the edit input fields
   const editForm = document.createElement('form');
@@ -154,7 +146,6 @@ const showEditField = (e) => {
   parentLi.insertBefore(editForm, childRef);
   editForm.setAttribute('position', 'absolute');
   editForm.style.zIndex = '1';
-  // e.target.parentElement.append(editForm);
   const editField = createInput('text', 'edit');
   const dateField = createInput('date', 'newDue');
   const saveBtn = ButtonFactory('SAVE');
@@ -171,6 +162,11 @@ const showEditField = (e) => {
   editForm.append(saveBtn);
   editForm.append(dateField.input);
   editForm.append(cancelBtn);
+
+   //disable all other edit and del buttons when editing an item
+   const notCancelBtns = document.querySelectorAll('button:not(.CANCEL-btn)');
+   console.log({notCancelBtns});
+   notCancelBtns.forEach((element) => element.setAttribute('disabled', ''));
 };
 
 const removeEditField = () => {
@@ -183,7 +179,7 @@ const removeEditField = () => {
 const autoToggleSave = (e) => {
   const target = e.target;
   console.log(target.id);
-  if (target && target.id === 'input-edit' && checkChange(e)) {
+  if (isSame(e)) {
     //disable save button
     document.querySelector('#SAVE-btn').setAttribute('disabled', '');
   } else {

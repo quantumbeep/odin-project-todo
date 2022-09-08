@@ -6,13 +6,13 @@ import {
   reset,
   showEditField,
 } from './dom.js';
-import { handleAdd, handleDel, handleEdit, clearInputs } from './logic.mjs';
+import { clearInputs, handleAdd, handleDel, handleEdit } from './logic.mjs';
 import './reset.css';
 import './style.css';
 
 const hed = header();
 document.body.append(hed);
-const inputProject = document.querySelector('.input-project')
+const inputProject = document.querySelector('.input-project');
 console.log(inputProject);
 
 //event delegation for buttons within li element
@@ -32,6 +32,10 @@ document.body.addEventListener('click', (e) => {
     removeEditField(e);
   }
 });
-clearInputs()
+clearInputs();
 createList();
-document.querySelector('ul').addEventListener('input', autoToggleSave);
+
+const ul = document.querySelector('ul');
+ul.addEventListener('input', (e) => {
+  autoToggleSave(e);
+});
