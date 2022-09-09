@@ -164,7 +164,7 @@ const showEditField = (e) => {
   editForm.append(cancelBtn);
 
    //disable all other edit and del buttons when editing an item
-   const notCancelBtns = document.querySelectorAll('button:not(.CANCEL-btn)');
+   const notCancelBtns = document.querySelectorAll('button:not(#CANCEL-btn)');
    console.log({notCancelBtns});
    notCancelBtns.forEach((element) => element.setAttribute('disabled', ''));
 };
