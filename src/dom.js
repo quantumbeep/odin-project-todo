@@ -43,6 +43,8 @@ const createLi = (item, list) => {
   const delBtn = ButtonFactory('DEL');
   const editBtn = ButtonFactory('EDIT');
   const taskQuickInput = createInput('text', 'task');
+  taskQuickInput.input.setAttribute('value', '');
+  taskQuickInput.input.setAttribute('placeholder', 'Quick add a task here...');
 
   //preview of most recent 3 tasks added
   const previewTaskList = document.createElement('ul');
@@ -50,9 +52,9 @@ const createLi = (item, list) => {
   const task1 = document.createElement('li');
   const task2 = document.createElement('li');
   const task3 = document.createElement('li');
-  task1.textContent = item.taskList[0]?.taskText || 'nada';
-  task2.textContent = item.taskList[1]?.taskText || 'nada';
-  task3.textContent = item.taskList[2]?.taskText || 'nada';
+  task1.textContent = item.taskList[0]?.taskText || '';
+  task2.textContent = item.taskList[1]?.taskText || '';
+  task3.textContent = item.taskList[2]?.taskText || '';
   previewTaskList.append(task1, task2, task3);
 
   const index = list.indexOf(item);
@@ -137,7 +139,6 @@ const clearLocalStorage = () => {
 
 const showEditField = (e) => {
  
-
   //create and show the edit input fields
   const editForm = document.createElement('form');
   const parentLi = e.target.closest('li');
@@ -188,7 +189,24 @@ const autoToggleSave = (e) => {
   }
 };
 
-const viewProject = () => {};
+const highlightProject = (e) => {
+  if (
+    e.target.tagName !== 'BUTTON' ||
+    e.target.tagName !== 'INPUT' ||
+    e.target !== 'li li'
+  ) {
+    const notActiveLi = document.querySelectorAll('li:not(li li)');
+    console.log(notActiveLi);
+    notActiveLi.forEach((element) => element.classList.remove('active'));
+    const activeLi = e.target.closest('li:not(li li)');
+    activeLi.classList.add('active');
+    console.log('class active added');
+  }
+};
+
+const showProject = () => {
+
+}
 
 export {
   header,
@@ -201,4 +219,5 @@ export {
   showEditField,
   removeEditField,
   reset,
+  highlightProject
 };

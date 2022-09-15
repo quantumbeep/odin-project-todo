@@ -4,6 +4,7 @@ import {
   header,
   removeEditField,
   reset,
+  highlightProject,
   showEditField,
 } from './dom.js';
 import { clearInputs, handleAdd, handleDel, handleEdit } from './logic.mjs';
@@ -38,4 +39,10 @@ createList();
 const ul = document.querySelector('ul');
 ul.addEventListener('input', (e) => {
   autoToggleSave(e);
+});
+const elNotInpBut = document.querySelectorAll('ul :not(input):not(button)');
+console.log(elNotInpBut);
+
+ul.addEventListener('click', (e) => {
+  highlightProject(e);
 });

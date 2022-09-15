@@ -15,8 +15,9 @@ const receiveItemData = (e) => {
   console.log(Date.parse(document.querySelector('.input-date').value));
   const dueDate = document.querySelector('.input-date').value;
   console.log('received project item data from inputs');
+
   const dateCreated = Date.now();
- 
+  const taskText = document.querySelector('.input-task').value;
 
   console.log(e.target.parentElement);
   console.log(e.target.parentElement.querySelector('input:first-of-type').id);
@@ -27,21 +28,19 @@ const receiveItemData = (e) => {
 
   if (projectText && dueDate && receiveTarget === 'input-project') {
     const taskList = [];
-
     return {
       projectText,
       dueDate,
       dateCreated,
       taskList,
     };
-  } else if (receiveTarget === 'input-task') {
-    const taskText = document.querySelector('.input-task').value;
+  } else if (taskText && receiveTarget === 'input-task') {
     return {
       taskText,
-      dateCreated
+      dateCreated,
     };
   } else {
-    alert('Please complete the missing fields...');
+    alert('Seems like there was something missing...');
   }
 };
 
@@ -106,8 +105,7 @@ const getFromLocalStorage = () => {
 };
 
 const handleAdd = (e) => {
-
-  e.preventDefault()
+  e.preventDefault();
   //receive the data into obj
 
   const itemData = receiveItemData(e);
@@ -176,16 +174,16 @@ const handleEdit = (e) => {
 
 const isSame = (e) => {
   const oldContent = e.target
-  .closest('li')
-  .querySelector('.item-project').textContent;
+    .closest('li')
+    .querySelector('.item-project').textContent;
   console.log(oldContent);
   const editFieldContent = e.target.value;
   console.log('check change');
   console.log(editFieldContent);
-  if(oldContent !== editFieldContent){
-    return false
+  if (oldContent !== editFieldContent) {
+    return false;
   } else {
-    return true
+    return true;
   }
 };
 

@@ -53,7 +53,7 @@ button:hover {
 }
 
 input {
-  width: 30%;
+  width: 500px;
   height: 3rem;
   border: 1px solid black;
   border-radius: 5px;
@@ -66,7 +66,7 @@ input {
 
 li input {
   height: 2rem;
-  /* width: max-content; */
+  width: fit-content;
   border: 1px solid black;
   border-radius: 5px;
   font-size: 12px;
@@ -82,6 +82,7 @@ ul {
   display: grid;
   grid-template-columns: 1fr;
   place-items: center;
+  width: 50%;
   /* height: 100vh; */
 }
 
@@ -125,6 +126,10 @@ li:hover {
   background: rgb(216, 195, 195);
   cursor: pointer;
 }
+li.active {
+  background: rgb(148, 64, 64);
+  cursor: pointer;
+}
 
 li form {
   display: grid;
@@ -142,11 +147,17 @@ ul.preview-list {
   min-width: 150px;
   max-width:max-content;
 }
+
 ul.preview-list li {
   display: flex;
   background: rgb(9, 31, 50);
-  height: auto;
+  height: 20px;
+  width: 200px;
   color: rgb(235, 173, 92);
   padding: 0.2rem;
   margin: 0;
+}
+
+section {
+  background-color: blueviolet;
 }
