@@ -2,12 +2,19 @@ import {
   autoToggleSave,
   createList,
   header,
+  highlightProject,
   removeEditField,
   reset,
-  highlightProject,
   showEditField,
+  showProject,
 } from './dom.js';
-import { clearInputs, handleAdd, handleDel, handleEdit } from './logic.mjs';
+import {
+  clearInputs,
+  getFromLocalStorage,
+  handleAdd,
+  handleDel,
+  handleEdit,
+} from './logic.mjs';
 import './reset.css';
 import './style.css';
 
@@ -34,15 +41,21 @@ document.body.addEventListener('click', (e) => {
   }
 });
 clearInputs();
-createList();
+
+//retrieve data list and render it
+const list = getFromLocalStorage();
+console.log('reached here index');
+createList(list);
 
 const ul = document.querySelector('ul');
 ul.addEventListener('input', (e) => {
   autoToggleSave(e);
 });
-const elNotInpBut = document.querySelectorAll('ul :not(input):not(button)');
+const elNotInpBut = document.querySelectorAll('ul:not(input):not(button)');
 console.log(elNotInpBut);
 
 ul.addEventListener('click', (e) => {
   highlightProject(e);
+  showProject(e);
 });
+

@@ -47,15 +47,15 @@ const createLi = (item, list) => {
   taskQuickInput.input.setAttribute('placeholder', 'Quick add a task here...');
 
   //preview of most recent 3 tasks added
-  const previewTaskList = document.createElement('ul');
-  previewTaskList.classList.add('preview-list');
-  const task1 = document.createElement('li');
-  const task2 = document.createElement('li');
-  const task3 = document.createElement('li');
-  task1.textContent = item.taskList[0]?.taskText || '';
-  task2.textContent = item.taskList[1]?.taskText || '';
-  task3.textContent = item.taskList[2]?.taskText || '';
-  previewTaskList.append(task1, task2, task3);
+  // const previewTaskList = document.createElement('ul');
+  // previewTaskList.classList.add('preview-list');
+  // const task1 = document.createElement('li');
+  // const task2 = document.createElement('li');
+  // const task3 = document.createElement('li');
+  // task1.textContent = item.taskList[0]?.taskText || '';
+  // task2.textContent = item.taskList[1]?.taskText || '';
+  // task3.textContent = item.taskList[2]?.taskText || '';
+  // previewTaskList.append(task1, task2, task3);
 
   const index = list.indexOf(item);
   li.classList.add(`li-${index}`, 'li');
@@ -73,7 +73,7 @@ const createLi = (item, list) => {
   addTaskBtn.classList.add('add-task-btn');
 
   li.append(dataContainer);
-  li.append(previewTaskList);
+  // li.append(previewTaskList);
   li.append(btnContainer);
   dataContainer.append(project);
   dataContainer.append(dueDate);
@@ -102,24 +102,62 @@ const createInput = (type, name) => {
   return { input, label };
 };
 
-const createList = () => {
+const createList = (list) => {
   const ul = document.createElement('ul');
-  document.body.append(ul);
-
-  //retrieve data list and render it
-  const list = getFromLocalStorage();
+  const projectUl = document.querySelector("ul[class='projects']");
+  if (!projectUl) {
+    document.body.append(ul);
+    ul.classList.add('projects');
+  } else {
+    console.log(projectUl.lastElementChild);
+    const currentProject = projectUl.lastElementChild;
+    currentProject.append(ul);
+    ul.classList.add('tasks');
+  }
   const copyList = list.slice();
   console.log(copyList);
-
-  copyList.reverse().forEach((item) => {
-    if (item.projectText) {
+  copyList.reverse().forEach((item, index) => {
+    if (item.projectText && copyList.length > 0 && item.taskList.length > 0) {
+      console.log('reached if block');
+      const li = createLi(item, list);
+      console.log(copyList.indexOf(item));
+      ul.append(li);
+      createList(item.taskList);
+    } else if (item.projectText && copyList.length > 0) {
+      console.log('reached else if block');
       const li = createLi(item, list);
       console.log(copyList.indexOf(item));
       ul.append(li);
     } else {
+      console.log('reached else block');
+      const taskLi = document.createElement('li');
+      taskLi.textContent = item.taskText;
+      console.log(taskLi.closest('li'));
+      ul.append(taskLi);
     }
   });
+  console.log('finished creating list');
 };
+
+// const createList = () => {
+//   const ul = document.createElement('ul');
+//   document.body.append(ul);
+
+//   //retrieve data list and render it
+//   const list = getFromLocalStorage();
+//   const copyList = list.slice();
+//   console.log(copyList);
+
+//   copyList.reverse().forEach((item) => {
+//     if (item.projectText) {
+//       const li = createLi(item, list);
+//       console.log(copyList.indexOf(item));
+//       ul.append(li);
+//     } else if() {
+
+//     }
+//   });
+// };
 
 const reset = () => {
   clearLocalStorage();
@@ -138,7 +176,6 @@ const clearLocalStorage = () => {
 };
 
 const showEditField = (e) => {
- 
   //create and show the edit input fields
   const editForm = document.createElement('form');
   const parentLi = e.target.closest('li');
@@ -164,10 +201,10 @@ const showEditField = (e) => {
   editForm.append(dateField.input);
   editForm.append(cancelBtn);
 
-   //disable all other edit and del buttons when editing an item
-   const notCancelBtns = document.querySelectorAll('button:not(#CANCEL-btn)');
-   console.log({notCancelBtns});
-   notCancelBtns.forEach((element) => element.setAttribute('disabled', ''));
+  //disable all other edit and del buttons when editing an item
+  const notCancelBtns = document.querySelectorAll('button:not(#CANCEL-btn)');
+  console.log({ notCancelBtns });
+  notCancelBtns.forEach((element) => element.setAttribute('disabled', ''));
 };
 
 const removeEditField = () => {
@@ -204,9 +241,9 @@ const highlightProject = (e) => {
   }
 };
 
-const showProject = () => {
-
-}
+const showProject = (e) => {
+  createList();
+};
 
 export {
   header,
@@ -219,5 +256,6 @@ export {
   showEditField,
   removeEditField,
   reset,
-  highlightProject
+  highlightProject,
+  showProject,
 };
