@@ -5,7 +5,7 @@ import { clearList, createList } from './dom.js';
 const clearInputs = () => {
   document.querySelector('.input-project').value = '';
   document.querySelector('.input-date').value = '';
-  console.log('value set');
+  console.log('input fields cleared');
 };
 
 const receiveItemData = (e) => {
@@ -58,8 +58,8 @@ const addItemToList = (e, item, list) => {
     const targetTaskList = list[targetIndex].taskList;
     // const { taskText } = item;
     targetTaskList.push(item);
-  } else {
-    //else push to list
+  } else if(e.target.id ==='ADD-btn'){
+    //else push to project list
     list.push(item);
     console.log('added to array');
   }
@@ -106,10 +106,11 @@ const getFromLocalStorage = () => {
 
 const handleAdd = (e) => {
   e.preventDefault();
-  //receive the data into obj
 
+  //receive the data into obj
   const itemData = receiveItemData(e);
   console.log(itemData);
+
   //retrieve list from local storage
   const list = getFromLocalStorage();
   console.log({ list });
@@ -117,9 +118,10 @@ const handleAdd = (e) => {
   if (itemData == null || list == null) {
     return;
   } else {
-    //push obj to array 'list' - 'list' is now modified and ready to store
+    //push obj to array 'list'
     addItemToList(e, itemData, list);
 
+    //'list' is now modified and ready to store
     //store array in local storage (stringify it first)
     saveToLocalStorage(list);
 
@@ -127,7 +129,7 @@ const handleAdd = (e) => {
     clearList();
 
     //re-render list
-    createList();
+    createList(list, 0);
   }
 };
 
@@ -141,11 +143,11 @@ const handleDel = (e) => {
   //store array in local storage (stringify it first)
   saveToLocalStorage(listAfterDel);
 
-  //clear the list before re-rendering
+  //clear the rendered list before re-rendering
   clearList();
 
   //re-render list
-  createList();
+  createList(listAfterDel, 0);
 };
 
 const handleEdit = (e) => {
@@ -166,7 +168,7 @@ const handleEdit = (e) => {
   clearList();
 
   //re-render list
-  createList();
+  createList(listAfterEdit, 0);
 
   //notify edit has been saved successfully
   alert('Item edited successfully');

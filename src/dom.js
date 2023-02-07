@@ -32,60 +32,83 @@ const ButtonFactory = (name) => {
   return buttonEl;
 };
 
-const createLi = (item, list) => {
-  const li = document.createElement('li');
-  const btnContainer = document.createElement('div');
-  const dataContainer = document.createElement('div');
-  const id = document.createElement('p');
-  const project = document.createElement('p');
-  const dueDate = document.createElement('p');
-  const addTaskBtn = ButtonFactory('ADD');
-  const delBtn = ButtonFactory('DEL');
-  const editBtn = ButtonFactory('EDIT');
-  const taskQuickInput = createInput('text', 'task');
-  taskQuickInput.input.setAttribute('value', '');
-  taskQuickInput.input.setAttribute('placeholder', 'Quick add a task here...');
-
-  //preview of most recent 3 tasks added
-  // const previewTaskList = document.createElement('ul');
-  // previewTaskList.classList.add('preview-list');
-  // const task1 = document.createElement('li');
-  // const task2 = document.createElement('li');
-  // const task3 = document.createElement('li');
-  // task1.textContent = item.taskList[0]?.taskText || '';
-  // task2.textContent = item.taskList[1]?.taskText || '';
-  // task3.textContent = item.taskList[2]?.taskText || '';
-  // previewTaskList.append(task1, task2, task3);
-
-  const index = list.indexOf(item);
-  li.classList.add(`li-${index}`, 'li');
-  li.classList.add('li');
-  btnContainer.classList.add('li-btn-container');
-  dataContainer.classList.add('li-data-container');
-
-  li.setAttribute('id', item.dateCreated);
-  id.classList.add('item-id');
-  project.classList.add('item-project');
-  dueDate.classList.add('item-due');
-  project.textContent = item.projectText;
-  dueDate.textContent = format(parseISO(item.dueDate), 'EEEE, MMM do, yyyy');
-  id.textContent = `ID: ${item.dateCreated}`;
-  addTaskBtn.classList.add('add-task-btn');
-
-  li.append(dataContainer);
-  // li.append(previewTaskList);
-  li.append(btnContainer);
-  dataContainer.append(project);
-  dataContainer.append(dueDate);
-  dataContainer.append(id);
-  btnContainer.append(delBtn);
-  btnContainer.append(editBtn);
-  btnContainer.append(addTaskBtn);
-  btnContainer.append(taskQuickInput.input);
-
-  console.log('li created');
-  return li;
+const createItem = (item) => {
+  const listItem = document.createElement('li');
+  const itemId = document.createElement('p');
+  const itemTitle = document.createElement('p');
+  // listItem.classList.add(`li-${index}`);
+  itemId.textContent = `${item.dateCreated}`;
+  itemTitle.textContent = item.projectText
+    ? `${item.projectText}`
+    : `${item.taskText}`;
+  listItem.append(itemId);
+  listItem.append(itemTitle);
+  if (item.projectText) {
+    listItem.classList.add('project');
+  } else {
+    listItem.classList.add('task');
+  }
+  return listItem;
 };
+
+// const createLi = (item) => {
+//   console.log({item});
+//   if (item.list) {
+//     const li = document.createElement('li');
+//     const addTaskBtn = ButtonFactory('ADD');
+//     const delBtn = ButtonFactory('DEL');
+//     const editBtn = ButtonFactory('EDIT');
+//     const taskQuickInput = createInput('text', 'task');
+//     const btnContainer = document.createElement('div');
+//     const dataContainer = document.createElement('div');
+//     const id = document.createElement('p');
+//     const project = document.createElement('p');
+
+//     taskQuickInput.input.setAttribute('value', '');
+//     taskQuickInput.input.setAttribute(
+//       'placeholder',
+//       'Quick add a task here...'
+//     );
+
+//     const index = indexOf(item);
+//     li.classList.add(`li-${index}`);
+//     li.classList.add('li');
+//     btnContainer.classList.add('li-btn-container');
+//     dataContainer.classList.add('li-data-container');
+//     const dueDate = document.createElement('p');
+//     dueDate.classList.add('item-due');
+//     dueDate.textContent = format(parseISO(item.dueDate), 'EEEE, MMM do, yyyy');
+
+//     dataContainer.append(dueDate);
+//     li.setAttribute('id', item.dateCreated);
+//     id.classList.add('item-id');
+//     project.classList.add('item-project');
+//     project.textContent = item.projectText;
+//     id.textContent = `ID: ${item.dateCreated}`;
+//     addTaskBtn.classList.add('add-task-btn');
+
+//     li.append(dataContainer);
+//     li.append(btnContainer);
+//     dataContainer.append(project);
+//     dataContainer.append(id);
+//     btnContainer.append(delBtn);
+//     btnContainer.append(editBtn);
+//     btnContainer.append(addTaskBtn);
+//     btnContainer.append(taskQuickInput.input);
+//     console.log('li created');
+//     return li;
+//   }
+//   if (item.taskList) {
+//     const taskItem = document.createElement('li');
+//     const taskText = document.createElement('p');
+//     const taskId = document.createElement('p');
+//     taskText.textContent = `Task: ${item.taskText}`;
+//     taskId.textContent = item.dateCreated;
+//     taskItem.append(taskText);
+//     taskItem.append(taskId);
+//     return taskItem;
+//   }
+// };
 
 const createInput = (type, name) => {
   const input = document.createElement('input');
@@ -102,63 +125,29 @@ const createInput = (type, name) => {
   return { input, label };
 };
 
-const createList = (list) => {
-  const ul = document.createElement('ul');
-  const projectUl = document.querySelector("ul[class='projects']");
-  if (!projectUl) {
-    document.body.append(ul);
-    ul.classList.add('projects');
-  } else {
-    console.log(projectUl.lastElementChild);
-    const currentProject = projectUl.lastElementChild;
-    currentProject.append(ul);
-    ul.classList.add('tasks');
+const createList = (list, index) => {
+  const pWrapper = document.querySelector('.projects');
+  const dWrapper = document.querySelector('.details');
+  const pItem = list[index];
+  console.log(list[index]);
+  if (index === list.length) {
+    console.log('finished creating list');
+    return;
   }
-  const copyList = list.slice();
-  console.log(copyList);
-  copyList.reverse().forEach((item, index) => {
-    if (item.projectText && copyList.length > 0 && item.taskList.length > 0) {
-      console.log('reached if block');
-      const li = createLi(item, list);
-      console.log(copyList.indexOf(item));
-      ul.append(li);
-      createList(item.taskList);
-    } else if (item.projectText && copyList.length > 0) {
-      console.log('reached else if block');
-      const li = createLi(item, list);
-      console.log(copyList.indexOf(item));
-      ul.append(li);
+  if (list.length > 0) {
+    const newItem = createItem(pItem);
+    console.log(newItem);
+    if (newItem.classList.contains('project')) {
+      pWrapper.append(newItem);
     } else {
-      console.log('reached else block');
-      const taskLi = document.createElement('li');
-      taskLi.textContent = item.taskText;
-      console.log(taskLi.closest('li'));
-      ul.append(taskLi);
+      dWrapper.append(newItem);
     }
-  });
-  console.log('finished creating list');
+    createList(list, index + 1);
+  }
+  const tList = pItem.taskList;
+  console.log(tList);
+  createList(tList, 0);
 };
-
-// const createList = () => {
-//   const ul = document.createElement('ul');
-//   document.body.append(ul);
-
-//   //retrieve data list and render it
-//   const list = getFromLocalStorage();
-//   const copyList = list.slice();
-//   console.log(copyList);
-
-//   copyList.reverse().forEach((item) => {
-//     if (item.projectText) {
-//       const li = createLi(item, list);
-//       console.log(copyList.indexOf(item));
-//       ul.append(li);
-//     } else if() {
-
-//     }
-//   });
-// };
-
 const reset = () => {
   clearLocalStorage();
   clearList();
@@ -166,8 +155,8 @@ const reset = () => {
 };
 
 const clearList = () => {
-  const ul = document.querySelector('ul');
-  ul.remove();
+  const ul = document.querySelector('.projects');
+  ul.replaceChildren();
 };
 
 const clearLocalStorage = () => {
@@ -175,8 +164,8 @@ const clearLocalStorage = () => {
   console.log('local cleared');
 };
 
+//Create and show the edit input fields
 const showEditField = (e) => {
-  //create and show the edit input fields
   const editForm = document.createElement('form');
   const parentLi = e.target.closest('li');
   const childRef = e.target.closest('div');
@@ -201,7 +190,7 @@ const showEditField = (e) => {
   editForm.append(dateField.input);
   editForm.append(cancelBtn);
 
-  //disable all other edit and del buttons when editing an item
+  //Disable all other edit and del buttons when editing an item
   const notCancelBtns = document.querySelectorAll('button:not(#CANCEL-btn)');
   console.log({ notCancelBtns });
   notCancelBtns.forEach((element) => element.setAttribute('disabled', ''));
@@ -227,10 +216,11 @@ const autoToggleSave = (e) => {
 };
 
 const highlightProject = (e) => {
+  console.log(e.target);
   if (
     e.target.tagName !== 'BUTTON' ||
     e.target.tagName !== 'INPUT' ||
-    e.target !== 'li li'
+    e.target !== document.querySelector('ul.tasks li')
   ) {
     const notActiveLi = document.querySelectorAll('li:not(li li)');
     console.log(notActiveLi);
@@ -241,14 +231,10 @@ const highlightProject = (e) => {
   }
 };
 
-const showProject = (e) => {
-  createList();
-};
-
 export {
   header,
   createInput,
-  createLi,
+  // createLi,
   createList,
   clearList,
   clearLocalStorage,
@@ -257,5 +243,4 @@ export {
   removeEditField,
   reset,
   highlightProject,
-  showProject,
 };

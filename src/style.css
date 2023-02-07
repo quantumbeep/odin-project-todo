@@ -77,13 +77,12 @@ label {
   color: rgb(0, 0, 0);
 }
 
-ul {
+ul.projects {
   background-color: rgb(255, 255, 255);
   display: grid;
   grid-template-columns: 1fr;
   place-items: center;
-  width: 50%;
-  /* height: 100vh; */
+  height: 100vh;
 }
 
 .li-data-container {
@@ -145,7 +144,7 @@ ul.preview-list {
   gap: 1px;
   place-self: center start;
   min-width: 150px;
-  max-width:max-content;
+  max-width: max-content;
 }
 
 ul.preview-list li {
@@ -160,4 +159,27 @@ ul.preview-list li {
 
 section {
   background-color: blueviolet;
+}
+
+.wrapper {
+  display: grid;
+  background-color: yellow;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+  padding: 1rem;
+}
+
+ul.projects {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  background-color: rgb(9, 106, 74);
+  height: 200px;
+}
+
+ul.details {
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: aquamarine;
+  height: 200px;
 }

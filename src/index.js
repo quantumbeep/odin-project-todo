@@ -6,7 +6,6 @@ import {
   removeEditField,
   reset,
   showEditField,
-  showProject,
 } from './dom.js';
 import {
   clearInputs,
@@ -19,9 +18,20 @@ import './reset.css';
 import './style.css';
 
 const hed = header();
+console.log(hed);
 document.body.append(hed);
 const inputProject = document.querySelector('.input-project');
 console.log(inputProject);
+
+const wrapperDiv = document.createElement('div');
+const listDiv = document.createElement('ul');
+const detailsDiv = document.createElement('ul');
+wrapperDiv.classList.add('wrapper');
+listDiv.classList.add('projects');
+detailsDiv.classList.add('details');
+document.body.append(wrapperDiv);
+wrapperDiv.append(listDiv);
+wrapperDiv.append(detailsDiv);
 
 //event delegation for buttons within li element
 document.body.addEventListener('click', (e) => {
@@ -44,18 +54,16 @@ clearInputs();
 
 //retrieve data list and render it
 const list = getFromLocalStorage();
+console.log(list);
 console.log('reached here index');
-createList(list);
+createList(list, 0);
 
 const ul = document.querySelector('ul');
 ul.addEventListener('input', (e) => {
   autoToggleSave(e);
 });
-const elNotInpBut = document.querySelectorAll('ul:not(input):not(button)');
-console.log(elNotInpBut);
-
-ul.addEventListener('click', (e) => {
-  highlightProject(e);
-  showProject(e);
-});
+const elNotInpBut = document.querySelectorAll(
+  'ul.tasks:not(input):not(button)'
+);
+// console.log({ elNotInpBut });
 
