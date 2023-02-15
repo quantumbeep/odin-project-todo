@@ -10,14 +10,13 @@ const clearInputs = () => {
 
 const receiveItemData = (e) => {
   const projectText = document.querySelector('.input-project').value;
-  console.log(typeof document.querySelector('.input-date').value);
-  console.log(document.querySelector('.input-date').value);
-  console.log(Date.parse(document.querySelector('.input-date').value));
-  const dueDate = document.querySelector('.input-date').value;
+  console.log(document.querySelector('#input-date').value);
+  const dueDate = document.querySelector('#input-date').value;
   console.log('received project item data from inputs');
 
   const dateCreated = Date.now();
-  const taskText = document.querySelector('.input-task').value;
+  console.log(typeof document.querySelector('#input-date').value);
+  console.log(Date.parse(document.querySelector('#input-date').value));
 
   console.log(e.target.parentElement);
   console.log(e.target.parentElement.querySelector('input:first-of-type').id);
@@ -34,7 +33,8 @@ const receiveItemData = (e) => {
       dateCreated,
       taskList,
     };
-  } else if (taskText && receiveTarget === 'input-task') {
+  } else if (receiveTarget === 'input-task') {
+    const taskText = document.querySelector('.input-task').value;
     return {
       taskText,
       dateCreated,
@@ -56,9 +56,8 @@ const addItemToList = (e, item, list) => {
     );
     const targetIndex = list.indexOf(foundItem);
     const targetTaskList = list[targetIndex].taskList;
-    // const { taskText } = item;
     targetTaskList.push(item);
-  } else if(e.target.id ==='ADD-btn'){
+  } else if (e.target.id === 'ADD-btn') {
     //else push to project list
     list.push(item);
     console.log('added to array');
@@ -109,7 +108,7 @@ const handleAdd = (e) => {
 
   //receive the data into obj
   const itemData = receiveItemData(e);
-  console.log(itemData);
+  console.log({ itemData });
 
   //retrieve list from local storage
   const list = getFromLocalStorage();
@@ -127,7 +126,7 @@ const handleAdd = (e) => {
 
     //clear the list before re-rendering
     clearList();
-
+    console.log('list cleared');
     //re-render list
     createList(list, 0);
   }

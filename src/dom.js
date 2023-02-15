@@ -125,29 +125,39 @@ const createInput = (type, name) => {
   return { input, label };
 };
 
-const createList = (list, index) => {
-  const pWrapper = document.querySelector('.projects');
-  const dWrapper = document.querySelector('.details');
-  const pItem = list[index];
-  console.log(list[index]);
-  if (index === list.length) {
-    console.log('finished creating list');
-    return;
-  }
-  if (list.length > 0) {
-    const newItem = createItem(pItem);
-    console.log(newItem);
+const createList = (list) => {
+  let index = 0;
+
+  const inner = () => {
+    const item = list[index];
+    const newItem = createItem(item);
     if (newItem.classList.contains('project')) {
+      const pWrapper = document.querySelector('.projects');
       pWrapper.append(newItem);
-    } else {
+      console.log('appended');
+    } else if (newItem.classList.contains('task')) {
+      const dWrapper = document.querySelector('.details');
       dWrapper.append(newItem);
+      console.log('appended');
     }
-    createList(list, index + 1);
-  }
-  const tList = pItem.taskList;
-  console.log(tList);
-  createList(tList, 0);
+
+    Object.entries(item).forEach(([key, value]) => {
+
+      if (key === 'taskList' && value.length > 0) {
+        console.log('taskList block');
+        index++;
+        createList(value);
+      }
+    });
+    index++;
+    if (index < list.length) {
+      console.log('finished creating list');
+      inner();
+    }
+  };
+  inner();
 };
+
 const reset = () => {
   clearLocalStorage();
   clearList();
@@ -155,8 +165,11 @@ const reset = () => {
 };
 
 const clearList = () => {
-  const ul = document.querySelector('.projects');
-  ul.replaceChildren();
+  const pl = document.querySelector('.projects');
+  console.log({ pl });
+  const tl = document.querySelector('.details');
+  pl.replaceChildren();
+  tl.replaceChildren();
 };
 
 const clearLocalStorage = () => {

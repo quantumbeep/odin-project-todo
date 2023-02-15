@@ -101,7 +101,7 @@ ul.projects {
 }
 
 li p {
-  font-size: 12px;
+  font-size: 16px;
 }
 li p:nth-child(3) {
   place-self: end start;

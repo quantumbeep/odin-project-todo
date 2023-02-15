@@ -54,9 +54,9 @@ clearInputs();
 
 //retrieve data list and render it
 const list = getFromLocalStorage();
-console.log(list);
-console.log('reached here index');
-createList(list, 0);
+console.log('getting list from local storage...');
+console.log({ list });
+createList(list);
 
 const ul = document.querySelector('ul');
 ul.addEventListener('input', (e) => {
@@ -66,4 +66,3 @@ const elNotInpBut = document.querySelectorAll(
   'ul.tasks:not(input):not(button)'
 );
 // console.log({ elNotInpBut });
-
