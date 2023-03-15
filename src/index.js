@@ -48,7 +48,7 @@ document.body.addEventListener('click', (e) => {
     handleDel(e);
   } else if (e.target.id === 'CANCEL-btn') {
     removeEditField(e);
-  }
+  } 
 });
 clearInputs();
 

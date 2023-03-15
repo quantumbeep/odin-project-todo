@@ -137,6 +137,7 @@ const createList = (list) => {
     const projectId = document.createElement('p');
     const projectTitle = document.createElement('p');
     const projectDue = document.createElement('p');
+
     projectItem.append(projectId);
     projectItem.append(projectTitle);
     projectItem.append(projectDue);
@@ -158,6 +159,7 @@ const createList = (list) => {
         case 'dateCreated':
           console.log(value);
           projectId.textContent = value;
+          projectItem.setAttribute('id', value);
           break;
         case 'taskText':
           console.log({ value });
@@ -168,8 +170,19 @@ const createList = (list) => {
           console.log('at tasks');
           console.log(value);
           console.log(typeof value);
+
           if (value.length > 0) {
-            createList(value);
+            console.log('reached tasklist');
+            projectItem.addEventListener('click', (e) => {
+              const clickedProject = e.target.closest('li').id;
+              const targetProject = list.find(
+                (item) => item.dateCreated.toString() === clickedProject
+              );
+              console.log({targetProject});
+              createList(value);
+            });
+          } else {
+            console.log('no tasks to add');
           }
           break;
         default:
