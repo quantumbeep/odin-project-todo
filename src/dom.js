@@ -171,19 +171,22 @@ const createList = (list) => {
           console.log(value);
           console.log(typeof value);
 
-          if (value.length > 0) {
-            console.log('reached tasklist');
-            projectItem.addEventListener('click', (e) => {
+          console.log('reached tasklist');
+          projectItem.addEventListener('click', (e) => {
+            if (value.length > 0) {
               const clickedProject = e.target.closest('li').id;
               const targetProject = list.find(
                 (item) => item.dateCreated.toString() === clickedProject
               );
-              console.log({targetProject});
+              console.log({ targetProject });
+              dWrapper.textContent = '';
+
               createList(value);
-            });
-          } else {
-            console.log('no tasks to add');
-          }
+            } else {
+              dWrapper.textContent = '';
+            }
+          });
+
           break;
         default:
           break;
