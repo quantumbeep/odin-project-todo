@@ -37,10 +37,10 @@ const createItem = (item) => {
   const itemId = document.createElement('p');
   const itemTitle = document.createElement('p');
   // listItem.classList.add(`li-${index}`);
-  itemId.textContent = `${item.dateCreated}`;
   itemTitle.textContent = item.projectText
     ? `${item.projectText}`
     : `${item.taskText}`;
+  itemId.textContent = `${item.dateCreated}`;
   listItem.append(itemId);
   listItem.append(itemTitle);
   if (item.projectText) {
@@ -130,28 +130,55 @@ const createList = (list) => {
 
   const inner = () => {
     const item = list[index];
-    const newItem = createItem(item);
-    if (newItem.classList.contains('project')) {
-      const pWrapper = document.querySelector('.projects');
-      pWrapper.append(newItem);
-      console.log('appended');
-    } else if (newItem.classList.contains('task')) {
-      const dWrapper = document.querySelector('.details');
-      dWrapper.append(newItem);
-      console.log('appended');
-    }
+    console.log({ index });
+    console.log(typeof item);
+    console.log({ item });
+    const projectItem = document.createElement('li');
+    const projectId = document.createElement('p');
+    const projectTitle = document.createElement('p');
+    const projectDue = document.createElement('p');
+    projectItem.append(projectId);
+    projectItem.append(projectTitle);
+    projectItem.append(projectDue);
+
+    const pWrapper = document.querySelector('.projects');
+    const dWrapper = document.querySelector('.details');
+    pWrapper.append(projectItem);
 
     Object.entries(item).forEach(([key, value]) => {
-
-      if (key === 'taskList' && value.length > 0) {
-        console.log('taskList block');
-        index++;
-        createList(value);
+      switch (key) {
+        case 'projectText':
+          console.log(value);
+          projectTitle.textContent = value;
+          break;
+        case 'dueDate':
+          console.log(value);
+          projectDue.textContent = value;
+          break;
+        case 'dateCreated':
+          console.log(value);
+          projectId.textContent = value;
+          break;
+        case 'taskText':
+          console.log({ value });
+          projectTitle.textContent = value;
+          dWrapper.append(projectItem);
+          break;
+        case 'taskList':
+          console.log('at tasks');
+          console.log(value);
+          console.log(typeof value);
+          if (value.length > 0) {
+            createList(value);
+          }
+          break;
+        default:
+          break;
       }
     });
-    index++;
-    if (index < list.length) {
-      console.log('finished creating list');
+    console.log({ index });
+    if (index < list.length - 1) {
+      index++;
       inner();
     }
   };

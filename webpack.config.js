@@ -11,6 +11,7 @@ module.exports = {
   devServer: {
     static: './dist',
     hot: true,
+    port: 8080,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -46,7 +47,6 @@ module.exports = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
-      
       },
     ],
   },
