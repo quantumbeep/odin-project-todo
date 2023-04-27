@@ -1,7 +1,8 @@
 import {
   autoToggleSave,
+  createButton,
+  createHeader,
   createList,
-  header,
   highlightProject,
   removeEditField,
   reset,
@@ -17,21 +18,19 @@ import {
 import './reset.css';
 import './style.css';
 
-const hed = header();
-console.log(hed);
-document.body.append(hed);
-const inputProject = document.querySelector('.input-project');
-console.log(inputProject);
+const header = createHeader();
+document.body.append(header);
+// const inputProject = document.querySelector('.input-project');
 
 const wrapperDiv = document.createElement('div');
-const listDiv = document.createElement('ul');
-const detailsDiv = document.createElement('ul');
+const projectList = document.createElement('ul');
+const taskList = document.createElement('ul');
 wrapperDiv.classList.add('wrapper');
-listDiv.classList.add('projects');
-detailsDiv.classList.add('details');
+projectList.classList.add('projects');
+taskList.classList.add('tasks');
 document.body.append(wrapperDiv);
-wrapperDiv.append(listDiv);
-wrapperDiv.append(detailsDiv);
+wrapperDiv.append(projectList);
+wrapperDiv.append(taskList);
 
 //event delegation for buttons within li element
 document.body.addEventListener('click', (e) => {
@@ -48,7 +47,33 @@ document.body.addEventListener('click', (e) => {
     handleDel(e);
   } else if (e.target.id === 'CANCEL-btn') {
     removeEditField(e);
-  } 
+  }
+});
+const projectL = document.querySelector('ul.projects');
+console.log({ projectL });
+projectL.addEventListener('mouseover', (e) => {
+  if (
+    e.target.tagName === 'LI' &&
+    e.target.id !== null &&
+    e.target.id !== undefined &&
+    !e.target.querySelector('button')
+  ) {
+    console.log(e.target.id);
+    const editIcon = createButton('EDIT');
+    e.target.append(editIcon);
+  }
+});
+projectL.addEventListener('mouseout', (e) => {
+  if (
+    e.target.tagName === 'LI' &&
+    e.target.id !== null &&
+    e.target.id !== undefined &&
+    e.target.querySelector('button')
+  ) {
+    console.log(e.target.id);
+
+    e.target.removeChild(e.target.querySelector('button'));
+  }
 });
 clearInputs();
 

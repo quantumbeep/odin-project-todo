@@ -3,13 +3,13 @@ import { add, isArray } from 'lodash';
 import Icon from './ice.jpg';
 import { getFromLocalStorage, isSame } from './logic.mjs';
 
-const header = () => {
+const createHeader = () => {
   const header = document.createElement('header');
   const mainForm = document.createElement('form');
   const text = createInput('text', 'project');
   const date = createInput('date', 'date');
-  const addItemBtn = ButtonFactory('ADD');
-  const resetBtn = ButtonFactory('RESET');
+  const addItemBtn = createButton('ADD');
+  const resetBtn = createButton('RESET');
   header.classList.add('header');
   mainForm.classList.add('main-form');
 
@@ -24,7 +24,7 @@ const header = () => {
   return header;
 };
 
-const ButtonFactory = (name) => {
+const createButton = (name) => {
   const buttonEl = document.createElement('button');
   buttonEl.textContent = name;
   buttonEl.classList.add(name);
@@ -55,9 +55,9 @@ const createItem = (item) => {
 //   console.log({item});
 //   if (item.list) {
 //     const li = document.createElement('li');
-//     const addTaskBtn = ButtonFactory('ADD');
-//     const delBtn = ButtonFactory('DEL');
-//     const editBtn = ButtonFactory('EDIT');
+//     const addTaskBtn = createButton('ADD');
+//     const delBtn = createButton('DEL');
+//     const editBtn = createButton('EDIT');
 //     const taskQuickInput = createInput('text', 'task');
 //     const btnContainer = document.createElement('div');
 //     const dataContainer = document.createElement('div');
@@ -131,7 +131,6 @@ const createList = (list) => {
   const inner = () => {
     const item = list[index];
     console.log({ index });
-    console.log(typeof item);
     console.log({ item });
     const projectItem = document.createElement('li');
     const projectId = document.createElement('p');
@@ -143,7 +142,7 @@ const createList = (list) => {
     projectItem.append(projectDue);
 
     const pWrapper = document.querySelector('.projects');
-    const dWrapper = document.querySelector('.details');
+    const taskList = document.querySelector('.tasks');
     pWrapper.append(projectItem);
 
     Object.entries(item).forEach(([key, value]) => {
@@ -164,13 +163,12 @@ const createList = (list) => {
         case 'taskText':
           console.log({ value });
           projectTitle.textContent = value;
-          dWrapper.append(projectItem);
+          taskList.append(projectItem);
           break;
         case 'taskList':
           console.log('at tasks');
-          console.log(value);
+          console.log({ value });
           console.log(typeof value);
-
           console.log('reached tasklist');
           projectItem.addEventListener('click', (e) => {
             if (value.length > 0) {
@@ -179,20 +177,18 @@ const createList = (list) => {
                 (item) => item.dateCreated.toString() === clickedProject
               );
               console.log({ targetProject });
-              dWrapper.textContent = '';
+              taskList.textContent = '';
 
               createList(value);
             } else {
-              dWrapper.textContent = '';
+              taskList.textContent = '';
             }
           });
-
           break;
         default:
           break;
       }
     });
-    console.log({ index });
     if (index < list.length - 1) {
       index++;
       inner();
@@ -210,7 +206,7 @@ const reset = () => {
 const clearList = () => {
   const pl = document.querySelector('.projects');
   console.log({ pl });
-  const tl = document.querySelector('.details');
+  const tl = document.querySelector('.tasks');
   pl.replaceChildren();
   tl.replaceChildren();
 };
@@ -224,6 +220,7 @@ const clearLocalStorage = () => {
 const showEditField = (e) => {
   const editForm = document.createElement('form');
   const parentLi = e.target.closest('li');
+  console.log({parentLi});
   const childRef = e.target.closest('div');
   console.log(e.target.closest('div'));
   parentLi.insertBefore(editForm, childRef);
@@ -231,8 +228,8 @@ const showEditField = (e) => {
   editForm.style.zIndex = '1';
   const editField = createInput('text', 'edit');
   const dateField = createInput('date', 'newDue');
-  const saveBtn = ButtonFactory('SAVE');
-  const cancelBtn = ButtonFactory('CANCEL');
+  const saveBtn = createButton('SAVE');
+  const cancelBtn = createButton('CANCEL');
   console.log(e.target.closest('li').querySelector('.item-project').innerHTML);
   console.log(e.target.closest('li').querySelector('.item-due').innerHTML);
   editField.input.value = e.target
@@ -288,7 +285,7 @@ const highlightProject = (e) => {
 };
 
 export {
-  header,
+  createHeader,
   createInput,
   // createLi,
   createList,
@@ -299,4 +296,5 @@ export {
   removeEditField,
   reset,
   highlightProject,
+  createButton,
 };

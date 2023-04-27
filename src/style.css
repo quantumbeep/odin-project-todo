@@ -16,7 +16,7 @@ body {
   width: 100%;
 }
 header {
-  background-color: rgb(72, 138, 214);
+  background-color: rgb(138, 132, 102);
   display: flex;
   flex-direction: column;
 }
@@ -78,17 +78,17 @@ label {
 }
 
 ul.projects {
-  background-color: rgb(255, 255, 255);
   display: grid;
   grid-template-columns: 1fr;
-  place-items: center;
-  height: 100vh;
+  background-color: rgb(65, 103, 90);
+  place-items: center flex-start;
+  height: auto;
 }
 
 .li-data-container {
   display: grid;
   grid-auto-rows: 1fr;
-  background-color: transparent;
+  background-color: rgb(117, 177, 255);
   place-self: start;
   min-width: none;
 }
@@ -115,9 +115,8 @@ li {
   border: #333 1px solid;
   border-radius: 5px;
   width: 90%;
-  height: auto;
   margin-top: 0.5rem;
-  place-items: center;
+  /* place-items: center; */
   padding: 0.5rem;
 }
 
@@ -126,18 +125,18 @@ li:hover {
   cursor: pointer;
 }
 li.active {
-  background: rgb(148, 64, 64);
+  background: rgb(198, 108, 108);
   cursor: pointer;
 }
 
-li form {
+/* li form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
   place-items: space-between;
-}
+} */
 
-ul.preview-list {
+/* ul.preview-list {
   background: none;
   display: grid;
   grid-template-columns: 1fr;
@@ -145,9 +144,9 @@ ul.preview-list {
   place-self: center start;
   min-width: 150px;
   max-width: max-content;
-}
+} */
 
-ul.preview-list li {
+/* ul.preview-list li {
   display: flex;
   background: rgb(9, 31, 50);
   height: 20px;
@@ -155,7 +154,7 @@ ul.preview-list li {
   color: rgb(235, 173, 92);
   padding: 0.2rem;
   margin: 0;
-}
+} */
 
 section {
   background-color: blueviolet;
@@ -163,23 +162,20 @@ section {
 
 .wrapper {
   display: grid;
-  background-color: yellow;
+  background-color: rgb(176, 176, 139);
   grid-template-columns: 1fr 1fr;
-  height: 100vh;
-  padding: 1rem;
+  /* height: auto; */
 }
 
-ul.projects {
+ul.tasks {
   display: grid;
   grid-template-columns: 1fr;
-
-  background-color: rgb(9, 106, 74);
-  height: 200px;
+  grid-template-rows: auto;
+  background-color: rgb(63, 64, 90);
+  align-items: flex-start;
 }
 
-ul.details {
-  display: grid;
-  grid-template-columns: 1fr;
-  background-color: aquamarine;
-  height: 200px;
+ul.tasks li {
+  background-color: rgb(136, 165, 155);
+  place-items: center;
 }
