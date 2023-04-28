@@ -114,11 +114,16 @@ li {
 }
 
 li:hover {
-  background: rgb(216, 195, 195);
+  background: rgb(228, 213, 213);
   cursor: pointer;
 }
 .projects li.active {
-  background: rgb(198, 108, 108);
+  background: rgb(203, 60, 60);
+  cursor: pointer;
+}
+
+li:hover.active{
+  background: rgb(241, 138, 138);
   cursor: pointer;
 }
 
