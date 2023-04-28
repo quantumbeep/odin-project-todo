@@ -183,6 +183,7 @@ const createList = (list) => {
             } else {
               taskList.textContent = '';
             }
+            highlightProject(e);
           });
           break;
         default:
@@ -220,7 +221,7 @@ const clearLocalStorage = () => {
 const showEditField = (e) => {
   const editForm = document.createElement('form');
   const parentLi = e.target.closest('li');
-  console.log({parentLi});
+  console.log({ parentLi });
   const childRef = e.target.closest('div');
   console.log(e.target.closest('div'));
   parentLi.insertBefore(editForm, childRef);

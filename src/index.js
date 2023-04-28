@@ -75,8 +75,8 @@ projectL.addEventListener('mouseout', (e) => {
     e.target.removeChild(e.target.querySelector('button'));
   }
 });
-clearInputs();
 
+clearInputs();
 //retrieve data list and render it
 const list = getFromLocalStorage();
 console.log('getting list from local storage...');

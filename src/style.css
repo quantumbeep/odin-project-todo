@@ -77,14 +77,6 @@ label {
   color: rgb(0, 0, 0);
 }
 
-ul.projects {
-  display: grid;
-  grid-template-columns: 1fr;
-  background-color: rgb(65, 103, 90);
-  place-items: center flex-start;
-  height: auto;
-}
-
 .li-data-container {
   display: grid;
   grid-auto-rows: 1fr;
@@ -116,7 +108,8 @@ li {
   border-radius: 5px;
   width: 90%;
   margin-top: 0.5rem;
-  /* place-items: center; */
+  margin-bottom: 0.5rem;
+  place-items: center;
   padding: 0.5rem;
 }
 
@@ -124,7 +117,7 @@ li:hover {
   background: rgb(216, 195, 195);
   cursor: pointer;
 }
-li.active {
+.projects li.active {
   background: rgb(198, 108, 108);
   cursor: pointer;
 }
@@ -164,18 +157,23 @@ section {
   display: grid;
   background-color: rgb(176, 176, 139);
   grid-template-columns: 1fr 1fr;
+  padding: 2rem;
   /* height: auto; */
+}
+ul {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+}
+
+ul.projects {
+  background-color: rgb(65, 103, 90);
 }
 
 ul.tasks {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto;
   background-color: rgb(63, 64, 90);
-  align-items: flex-start;
 }
 
-ul.tasks li {
+.tasks li {
   background-color: rgb(136, 165, 155);
-  place-items: center;
 }
