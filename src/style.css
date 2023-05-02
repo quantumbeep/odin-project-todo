@@ -10,13 +10,17 @@
   font-display: swap;
 }
 
+:root {
+  --base-color-li: rgb(119, 184, 173);
+}
+
 body {
   font-family: 'Rubik';
   height: 100%;
   width: 100%;
 }
 header {
-  background-color: rgb(138, 132, 102);
+  background: rgb(138, 132, 102);
   display: flex;
   flex-direction: column;
 }
@@ -80,7 +84,7 @@ label {
 .li-data-container {
   display: grid;
   grid-auto-rows: 1fr;
-  background-color: rgb(117, 177, 255);
+  background: rgb(117, 177, 255);
   place-self: start;
   min-width: none;
 }
@@ -113,16 +117,16 @@ li {
   padding: 0.5rem;
 }
 
-li:hover {
-  background: rgb(228, 213, 213);
-  cursor: pointer;
-}
 .projects li.active {
   background: rgb(203, 60, 60);
   cursor: pointer;
 }
+.projects li.hovering {
+  background: rgb(106, 209, 121);
+  cursor: pointer;
+}
 
-li:hover.active{
+.projects li.active.hovering {
   background: rgb(241, 138, 138);
   cursor: pointer;
 }
@@ -155,12 +159,12 @@ li:hover.active{
 } */
 
 section {
-  background-color: blueviolet;
+  background: blueviolet;
 }
 
 .wrapper {
   display: grid;
-  background-color: rgb(176, 176, 139);
+  background: rgb(176, 176, 139);
   grid-template-columns: 1fr 1fr;
   padding: 2rem;
   /* height: auto; */
@@ -172,13 +176,13 @@ ul {
 }
 
 ul.projects {
-  background-color: rgb(65, 103, 90);
+  background: rgb(65, 103, 90);
 }
 
 ul.tasks {
-  background-color: rgb(63, 64, 90);
+  background: rgb(63, 64, 90);
 }
 
 .tasks li {
-  background-color: rgb(136, 165, 155);
+  background: rgb(136, 165, 155);
 }

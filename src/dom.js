@@ -183,7 +183,6 @@ const createList = (list) => {
             } else {
               taskList.textContent = '';
             }
-            highlightProject(e);
           });
           break;
         default:
@@ -285,6 +284,34 @@ const highlightProject = (e) => {
   }
 };
 
+const hoverProject = (e) => {
+  console.log(e.target);
+  if (
+    e.target.tagName === 'LI' &&
+    e.target.id &&
+    e.target !== document.querySelector('ul.tasks li') &&
+    !e.target.querySelector('button')
+  ) {
+    e.target.classList.add('hovering');
+    e.target.classList.remove('unhovering');
+    console.log('class hovering added');
+    console.log(e.target.id);
+    const editIcon = createButton('EDIT');
+    e.target.append(editIcon);
+  }
+};
+
+const unHoverProject = (e) => {
+  console.log(e.target);
+
+  e.target.classList.remove('hovering');
+
+  console.log('class unhovering added');
+  const toBeRemovedNode = document.querySelector('#EDIT-btn');
+  toBeRemovedNode.remove();
+};
+// };
+
 export {
   createHeader,
   createInput,
@@ -298,4 +325,6 @@ export {
   reset,
   highlightProject,
   createButton,
+  hoverProject,
+  unHoverProject,
 };

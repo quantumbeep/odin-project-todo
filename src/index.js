@@ -4,9 +4,11 @@ import {
   createHeader,
   createList,
   highlightProject,
+  hoverProject,
   removeEditField,
   reset,
   showEditField,
+  unHoverProject,
 } from './dom.js';
 import {
   clearInputs,
@@ -49,32 +51,20 @@ document.body.addEventListener('click', (e) => {
     removeEditField(e);
   }
 });
-const projectL = document.querySelector('ul.projects');
-console.log({ projectL });
-projectL.addEventListener('mouseover', (e) => {
-  if (
-    e.target.tagName === 'LI' &&
-    e.target.id !== null &&
-    e.target.id !== undefined &&
-    !e.target.querySelector('button')
-  ) {
-    console.log(e.target.id);
-    const editIcon = createButton('EDIT');
-    e.target.append(editIcon);
-  }
-});
-projectL.addEventListener('mouseout', (e) => {
-  if (
-    e.target.tagName === 'LI' &&
-    e.target.id !== null &&
-    e.target.id !== undefined &&
-    e.target.querySelector('button')
-  ) {
-    console.log(e.target.id);
 
-    e.target.removeChild(e.target.querySelector('button'));
-  }
+const projectL = document.querySelector('ul.projects');
+
+console.log({ projectL });
+
+projectL.addEventListener('click', (e) => {
+  highlightProject(e);
 });
+projectL.addEventListener('mouseover', (e) => {
+  console.log('mouseover triggered');
+  hoverProject(e);
+});
+
+
 
 clearInputs();
 //retrieve data list and render it
@@ -82,6 +72,14 @@ const list = getFromLocalStorage();
 console.log('getting list from local storage...');
 console.log({ list });
 createList(list);
+const allLiProjects = document.querySelectorAll('ul.projects > li');
+console.log({allLiProjects});
+allLiProjects.forEach((element) => {
+  element.addEventListener('mouseleave', (e) => {
+    console.log('mouseleave triggered');
+    unHoverProject(e);
+  });
+});
 
 const ul = document.querySelector('ul');
 ul.addEventListener('input', (e) => {
