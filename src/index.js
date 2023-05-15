@@ -3,6 +3,7 @@ import {
   createHeader,
   createList,
   handleDone,
+  handleSave,
   highlightProject,
   hoverProject,
   removeEditField,
@@ -46,7 +47,7 @@ document.body.addEventListener('click', (e) => {
   } else if (e.target.id === 'DONE-btn') {
     handleDone(e);
   } else if (e.target.id === 'SAVE-btn') {
-    handleEdit(e);
+    handleSave(e);
   } else if (e.target.id === 'DEL-btn') {
     handleDel(e);
   } else if (e.target.id === 'CANCEL-btn') {

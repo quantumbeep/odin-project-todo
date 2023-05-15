@@ -219,7 +219,6 @@ const showEditField = (e) => {
   e.target.classList.remove('EDIT');
   e.target.id = 'DONE-btn';
   const projectUl = document.querySelector('ul.projects');
-  projectUl.classList.add('unfocus');
 
   //grab the id of the li element
   const itemId = e.target.closest('li').id;
@@ -229,6 +228,10 @@ const showEditField = (e) => {
   const nameEl = e.target.closest('li').querySelector('p.name');
   nameEl.contentEditable = true;
   console.log({ nameEl });
+
+  //move cursor to now editable name field
+  nameEl.focus({ focusVisible: true });
+
   //get 'nameEl' data from local storage to compare
   const list = getFromLocalStorage();
   const foundItem = list.find((item) => item.dateCreated.toString() === itemId);
@@ -251,6 +254,46 @@ const showEditField = (e) => {
 
 const handleDone = (e) => {
   console.log(e.target);
+  e.target.parentNode.querySelector('button').id = 'EDIT-btn';
+  e.target.parentNode.querySelector('button').textContent = 'EDIT';
+  const nameEl = e.target.closest('li').querySelector('p.name');
+  nameEl.contentEditable = false;
+};
+
+//note to self: integrate into handleDone and showEditField functions as one fn
+const handleSave = (e) => {
+  console.log(e.target);
+  //get id of save target from element
+  const targetId = e.target.parentNode.id;
+  //assign updated data to const newData for later update
+  const newData = e.target.parentNode.querySelector('p.name').textContent;
+
+  //get the list data from local storage
+
+  const list = getFromLocalStorage();
+
+  //find the item in data that matches SAVE button event.target
+  const foundItem = list.find(
+    (item) => item.dateCreated.toString() === targetId
+  );
+  const { projectText } = foundItem;
+
+  //update the item with newData
+  console.log({ foundItem });
+  const updatedItem = { ...foundItem, projectText: newData };
+  const targetIndex = list.indexOf(foundItem);
+
+  //splice it into list
+  list.splice(targetIndex, 1, updatedItem);
+  const userSelection = confirm(
+    `Confirm save? from ${projectText} to ${newData}`
+  );
+  if (userSelection) {
+    localStorage.setItem('list', JSON.stringify(list));
+  } else {
+  }
+
+  e.target.parentNode.querySelector('p.name').textContent;
   e.target.parentNode.querySelector('button').id = 'EDIT-btn';
   e.target.parentNode.querySelector('button').textContent = 'EDIT';
   const nameEl = e.target.closest('li').querySelector('p.name');
@@ -301,7 +344,9 @@ const hoverProject = (e) => {
     e.target.tagName === 'LI' &&
     e.target.id &&
     e.target !== document.querySelector('ul.tasks li') &&
-    !e.target.querySelector('button')
+    !e.target.parentNode.querySelector('#DONE-btn') &&
+    !e.target.parentNode.querySelector('#SAVE-btn') &&
+    !e.target.parentNode.querySelector('#EDIT-btn')
   ) {
     e.target.classList.add('hovering');
     console.log('class hovering added');
@@ -318,7 +363,7 @@ const unHoverProject = (e) => {
   toBeRemovedNode.remove();
   setTimeout(() => {
     console.log({ toBeRemovedNode });
-  }, 5000);
+  }, 1000);
 };
 
 export {
@@ -337,4 +382,5 @@ export {
   hoverProject,
   unHoverProject,
   handleDone,
+  handleSave,
 };
