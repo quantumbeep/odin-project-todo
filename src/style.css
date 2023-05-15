@@ -12,6 +12,7 @@
 
 :root {
   --base-color-li: rgb(119, 184, 173);
+  --base-color-project-container: blue;
 }
 
 body {
@@ -167,8 +168,8 @@ section {
   background: rgb(176, 176, 139);
   grid-template-columns: 1fr 1fr;
   padding: 2rem;
-  /* height: auto; */
 }
+
 ul {
   display: flex;
   flex-direction: column;
@@ -176,7 +177,11 @@ ul {
 }
 
 ul.projects {
-  background: rgb(65, 103, 90);
+  background: var(--base-color-project-container);
+}
+
+.projects.unfocus {
+  filter: grayscale(60%);
 }
 
 ul.tasks {
@@ -184,5 +189,5 @@ ul.tasks {
 }
 
 .tasks li {
-  background: rgb(136, 165, 155);
+  background: var(--base-color-li);
 }

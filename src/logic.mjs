@@ -173,11 +173,11 @@ const handleEdit = (e) => {
   alert('Item edited successfully');
 };
 
-const isSame = (e) => {
+const isSame = (e ) => {
   const oldContent = e.target
     .closest('li')
-    .querySelector('.item-project').textContent;
-  console.log(oldContent);
+    .querySelector('p.name').textContent;
+  console.log({oldContent});
   const editFieldContent = e.target.value;
   console.log('check change');
   console.log(editFieldContent);

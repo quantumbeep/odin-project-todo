@@ -32,24 +32,24 @@ const createButton = (name) => {
   return buttonEl;
 };
 
-const createItem = (item) => {
-  const listItem = document.createElement('li');
-  const itemId = document.createElement('p');
-  const itemTitle = document.createElement('p');
-  // listItem.classList.add(`li-${index}`);
-  itemTitle.textContent = item.projectText
-    ? `${item.projectText}`
-    : `${item.taskText}`;
-  itemId.textContent = `${item.dateCreated}`;
-  listItem.append(itemId);
-  listItem.append(itemTitle);
-  if (item.projectText) {
-    listItem.classList.add('project');
-  } else {
-    listItem.classList.add('task');
-  }
-  return listItem;
-};
+// const createItem = (item) => {
+//   const listItem = document.createElement('li');
+//   const itemId = document.createElement('p');
+//   const itemTitle = document.createElement('p');
+//   listItem.classList.add(`li-${index}`);
+//   itemTitle.textContent = item.projectText
+//     ? `${item.projectText}`
+//     : `${item.taskText}`;
+//   itemId.textContent = `${item.dateCreated}`;
+//   listItem.append(itemId);
+//   listItem.append(itemTitle);
+//   if (item.projectText) {
+//     listItem.classList.add('project');
+//   } else {
+//     listItem.classList.add('task');
+//   }
+//   return listItem;
+// };
 
 // const createLi = (item) => {
 //   console.log({item});
@@ -98,7 +98,7 @@ const createItem = (item) => {
 //     console.log('li created');
 //     return li;
 //   }
-//   if (item.taskList) {
+//   if (item.taskUl) {
 //     const taskItem = document.createElement('li');
 //     const taskText = document.createElement('p');
 //     const taskId = document.createElement('p');
@@ -132,56 +132,49 @@ const createList = (list) => {
     const item = list[index];
     console.log({ index });
     console.log({ item });
-    const projectItem = document.createElement('li');
-    const projectId = document.createElement('p');
-    const projectTitle = document.createElement('p');
-    const projectDue = document.createElement('p');
+    const listItem = document.createElement('li');
+    const itemId = document.createElement('p');
+    const itemName = document.createElement('p');
+    const itemDue = document.createElement('p');
 
-    projectItem.append(projectId);
-    projectItem.append(projectTitle);
-    projectItem.append(projectDue);
+    listItem.append(itemId);
+    listItem.append(itemName);
+    listItem.append(itemDue);
 
-    const pWrapper = document.querySelector('.projects');
-    const taskList = document.querySelector('.tasks');
-    pWrapper.append(projectItem);
+    itemName.classList.add('name');
+
+    const projectUl = document.querySelector('ul.projects');
+    const taskUl = document.querySelector('ul.tasks');
+    projectUl.append(listItem);
 
     Object.entries(item).forEach(([key, value]) => {
       switch (key) {
         case 'projectText':
-          console.log(value);
-          projectTitle.textContent = value;
+          itemName.textContent = value;
           break;
         case 'dueDate':
-          console.log(value);
-          projectDue.textContent = value;
+          itemDue.textContent = value;
           break;
         case 'dateCreated':
-          console.log(value);
-          projectId.textContent = value;
-          projectItem.setAttribute('id', value);
+          itemId.textContent = value;
+          listItem.setAttribute('id', value);
           break;
         case 'taskText':
-          console.log({ value });
-          projectTitle.textContent = value;
-          taskList.append(projectItem);
+          itemName.textContent = value;
+          taskUl.append(listItem);
           break;
         case 'taskList':
-          console.log('at tasks');
-          console.log({ value });
-          console.log(typeof value);
-          console.log('reached tasklist');
-          projectItem.addEventListener('click', (e) => {
+          listItem.addEventListener('click', (e) => {
             if (value.length > 0) {
               const clickedProject = e.target.closest('li').id;
               const targetProject = list.find(
                 (item) => item.dateCreated.toString() === clickedProject
               );
               console.log({ targetProject });
-              taskList.textContent = '';
-
+              taskUl.textContent = '';
               createList(value);
             } else {
-              taskList.textContent = '';
+              taskUl.textContent = '';
             }
           });
           break;
@@ -205,48 +198,63 @@ const reset = () => {
 
 const clearList = () => {
   const pl = document.querySelector('.projects');
-  console.log({ pl });
   const tl = document.querySelector('.tasks');
   pl.replaceChildren();
   tl.replaceChildren();
 };
 
+//delete all data from browser local storage
 const clearLocalStorage = () => {
   localStorage.clear();
   console.log('local cleared');
 };
 
-//Create and show the edit input fields
+//create and show the edit input fields
 const showEditField = (e) => {
-  const editForm = document.createElement('form');
-  const parentLi = e.target.closest('li');
-  console.log({ parentLi });
-  const childRef = e.target.closest('div');
-  console.log(e.target.closest('div'));
-  parentLi.insertBefore(editForm, childRef);
-  editForm.setAttribute('position', 'absolute');
-  editForm.style.zIndex = '1';
-  const editField = createInput('text', 'edit');
-  const dateField = createInput('date', 'newDue');
-  const saveBtn = createButton('SAVE');
-  const cancelBtn = createButton('CANCEL');
-  console.log(e.target.closest('li').querySelector('.item-project').innerHTML);
-  console.log(e.target.closest('li').querySelector('.item-due').innerHTML);
-  editField.input.value = e.target
-    .closest('li')
-    .querySelector('.item-project').innerHTML;
-  dateField.input.value = e.target
-    .closest('li')
-    .querySelector('.item-due').innerHTML;
-  editForm.append(editField.input);
-  editForm.append(saveBtn);
-  editForm.append(dateField.input);
-  editForm.append(cancelBtn);
+  //target should be EDIT button element
+  console.log(e.target);
 
-  //Disable all other edit and del buttons when editing an item
-  const notCancelBtns = document.querySelectorAll('button:not(#CANCEL-btn)');
-  console.log({ notCancelBtns });
-  notCancelBtns.forEach((element) => element.setAttribute('disabled', ''));
+  //replace EDIT button with DONE button
+  e.target.textContent = 'DONE';
+  e.target.classList.remove('EDIT');
+  e.target.id = 'DONE-btn';
+  const projectUl = document.querySelector('ul.projects');
+  projectUl.classList.add('unfocus');
+
+  //grab the id of the li element
+  const itemId = e.target.closest('li').id;
+  console.log({ itemId });
+
+  //make p element the project ID, editable
+  const nameEl = e.target.closest('li').querySelector('p.name');
+  nameEl.contentEditable = true;
+  console.log({ nameEl });
+  //get 'nameEl' data from local storage to compare
+  const list = getFromLocalStorage();
+  const foundItem = list.find((item) => item.dateCreated.toString() === itemId);
+  const { projectText } = foundItem;
+
+  nameEl.addEventListener('input', (e) => {
+    console.log('fired!');
+    console.log(nameEl.textContent);
+    if (nameEl.textContent !== projectText) {
+      console.log('do you want to save the changes you have made?');
+      console.log(e.target.parentNode);
+      e.target.parentNode.querySelector('button').id = 'SAVE-btn';
+      e.target.parentNode.querySelector('button').textContent = 'SAVE';
+    } else {
+      e.target.parentNode.querySelector('button').id = 'DONE-btn';
+      e.target.parentNode.querySelector('button').textContent = 'DONE';
+    }
+  });
+};
+
+const handleDone = (e) => {
+  console.log(e.target);
+  e.target.parentNode.querySelector('button').id = 'EDIT-btn';
+  e.target.parentNode.querySelector('button').textContent = 'EDIT';
+  const nameEl = e.target.closest('li').querySelector('p.name');
+  nameEl.contentEditable = false;
 };
 
 const removeEditField = () => {
@@ -257,14 +265,17 @@ const removeEditField = () => {
 };
 
 const autoToggleSave = (e) => {
-  const target = e.target;
-  console.log(target.id);
-  if (isSame(e)) {
-    //disable save button
-    document.querySelector('#SAVE-btn').setAttribute('disabled', '');
+  //target should be 'p' element with class 'name'
+  console.log(e.target);
+  const oldContent = e.target.textContent;
+  console.log({ oldContent });
+  console.log({ oldContent });
+  if (true) {
+    //do nothing
   } else {
-    //enable save button
-    document.querySelector('#SAVE-btn').removeAttribute('disabled');
+    //change done button to save button
+    e.target.parentNode.querySelector('button#DONE-btn').id = 'SAVE-btn';
+    e.target.parentNode.querySelector('button#DONE-btn').textContent = 'SAVE';
   }
 };
 
@@ -293,24 +304,22 @@ const hoverProject = (e) => {
     !e.target.querySelector('button')
   ) {
     e.target.classList.add('hovering');
-    e.target.classList.remove('unhovering');
     console.log('class hovering added');
-    console.log(e.target.id);
-    const editIcon = createButton('EDIT');
-    e.target.append(editIcon);
+    const editButton = createButton('EDIT');
+    e.target.append(editButton);
   }
 };
 
+//removes 'hovering' class from li so css returns to base color
+//grabs and removes edit button from target li
 const unHoverProject = (e) => {
-  console.log(e.target);
-
   e.target.classList.remove('hovering');
-
-  console.log('class unhovering added');
   const toBeRemovedNode = document.querySelector('#EDIT-btn');
   toBeRemovedNode.remove();
+  setTimeout(() => {
+    console.log({ toBeRemovedNode });
+  }, 5000);
 };
-// };
 
 export {
   createHeader,
@@ -327,4 +336,5 @@ export {
   createButton,
   hoverProject,
   unHoverProject,
+  handleDone,
 };

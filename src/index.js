@@ -1,8 +1,8 @@
 import {
   autoToggleSave,
-  createButton,
   createHeader,
   createList,
+  handleDone,
   highlightProject,
   hoverProject,
   removeEditField,
@@ -43,6 +43,8 @@ document.body.addEventListener('click', (e) => {
     reset();
   } else if (e.target.id === 'EDIT-btn') {
     showEditField(e);
+  } else if (e.target.id === 'DONE-btn') {
+    handleDone(e);
   } else if (e.target.id === 'SAVE-btn') {
     handleEdit(e);
   } else if (e.target.id === 'DEL-btn') {
@@ -64,16 +66,18 @@ projectL.addEventListener('mouseover', (e) => {
   hoverProject(e);
 });
 
-
-
 clearInputs();
 //retrieve data list and render it
 const list = getFromLocalStorage();
 console.log('getting list from local storage...');
 console.log({ list });
 createList(list);
+
+//grab all li elements from projects ul
+//add event listener to each li for cursor leaving li
+//event triggers unHoverProject
 const allLiProjects = document.querySelectorAll('ul.projects > li');
-console.log({allLiProjects});
+console.log({ allLiProjects });
 allLiProjects.forEach((element) => {
   element.addEventListener('mouseleave', (e) => {
     console.log('mouseleave triggered');
@@ -81,10 +85,10 @@ allLiProjects.forEach((element) => {
   });
 });
 
-const ul = document.querySelector('ul');
-ul.addEventListener('input', (e) => {
-  autoToggleSave(e);
-});
+// const ul = document.querySelector('ul');
+// ul.addEventListener('input', (e) => {
+//   autoToggleSave(e);
+// });
 const elNotInpBut = document.querySelectorAll(
   'ul.tasks:not(input):not(button)'
 );
