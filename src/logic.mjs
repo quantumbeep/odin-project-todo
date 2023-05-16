@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns';
 import { indexOf, update } from 'lodash';
-import { clearList, createList } from './dom.js';
+import { clearList, createList } from './dom.mjs';
 
 const clearInputs = () => {
   document.querySelector('.input-project').value = '';
@@ -173,11 +173,9 @@ const handleEdit = (e) => {
   alert('Item edited successfully');
 };
 
-const isSame = (e ) => {
-  const oldContent = e.target
-    .closest('li')
-    .querySelector('p.name').textContent;
-  console.log({oldContent});
+const isSame = (e) => {
+  const oldContent = e.target.closest('li').querySelector('p.name').textContent;
+  console.log({ oldContent });
   const editFieldContent = e.target.value;
   console.log('check change');
   console.log(editFieldContent);

@@ -1,5 +1,5 @@
 {
-  "name": "odin-project-todo",
+  "name": "project-todo",
   "version": "1.0.0",
   "description": "",
   "private": false,
@@ -15,7 +15,7 @@
     "url": "git+https://github.com/quantumbeep/odin-project-todo.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "quantumbeep",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/quantumbeep/odin-project-todo/issues"
@@ -23,7 +23,6 @@
   "homepage": "https://quantumbeep.github.io/odin-project-todo/",
   "devDependencies": {
     "css-loader": "^6.7.3",
-    "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.1",
     "webpack": "^5.74.0",

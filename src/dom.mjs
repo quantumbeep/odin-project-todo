@@ -1,6 +1,5 @@
 import { format, parseISO } from 'date-fns';
 import { add, isArray } from 'lodash';
-import Icon from './ice.jpg';
 import { getFromLocalStorage, isSame } from './logic.mjs';
 
 const createHeader = () => {

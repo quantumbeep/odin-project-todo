@@ -10,7 +10,7 @@ import {
   reset,
   showEditField,
   unHoverProject,
-} from './dom.js';
+} from './dom.mjs';
 import {
   clearInputs,
   getFromLocalStorage,
@@ -63,7 +63,7 @@ projectL.addEventListener('click', (e) => {
   highlightProject(e);
 });
 projectL.addEventListener('mouseover', (e) => {
-  console.log('mouseover triggered');
+  // console.log('mouseover triggered');
   hoverProject(e);
 });
 
@@ -81,7 +81,7 @@ const allLiProjects = document.querySelectorAll('ul.projects > li');
 console.log({ allLiProjects });
 allLiProjects.forEach((element) => {
   element.addEventListener('mouseleave', (e) => {
-    console.log('mouseleave triggered');
+    // console.log('mouseleave triggered');
     unHoverProject(e);
   });
 });
