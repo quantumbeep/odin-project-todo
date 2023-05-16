@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "webpack serve --open"
+    "start": "webpack serve --open",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -18,9 +20,10 @@
   "bugs": {
     "url": "https://github.com/quantumbeep/odin-project-todo/issues"
   },
-  "homepage": "https://github.com/quantumbeep/odin-project-todo",
+  "homepage": "https://quantumbeep.github.io/odin-project-todo/",
   "devDependencies": {
     "css-loader": "^6.7.3",
+    "gh-pages": "^5.0.0",
     "html-webpack-plugin": "^5.5.0",
     "style-loader": "^3.3.1",
     "webpack": "^5.74.0",
