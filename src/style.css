@@ -21,7 +21,7 @@ body {
   width: 100%;
 }
 header {
-  background: rgb(138, 132, 102);
+  background: rgb(226, 196, 46);
   display: flex;
   flex-direction: column;
 }
@@ -30,7 +30,9 @@ form {
   display: flex;
   flex-direction: column;
   place-items: center;
-  margin: 0.5rem;
+  margin: 2rem;
+  padding: 2rem;
+  background: rgb(44, 143, 205);
 }
 
 button {
@@ -107,7 +109,7 @@ li p:nth-child(3) {
 }
 li {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   background: rgb(184, 167, 167);
   border: #333 1px solid;
   border-radius: 5px;
@@ -116,6 +118,7 @@ li {
   margin-bottom: 0.5rem;
   place-items: center;
   padding: 0.5rem;
+  min-height: 200px
 }
 
 .projects li.active {
@@ -165,29 +168,61 @@ section {
 
 .wrapper {
   display: grid;
-  background: rgb(176, 176, 139);
-  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    '. . addtask'
+    'projects tasks tasks';
+
+  background: rgb(204, 137, 211);
+  grid-template-rows: 50px auto;
+  grid-template-columns: 40% 30% 30%;
+  margin: 2rem;
   padding: 2rem;
+  gap: 10px
+}
+
+.addtask {
+  grid-area: addtask;
+  grid-column: 3 / 4;
+  /* place-self: center; */
+  font-size: larger;
 }
 
 ul {
   display: flex;
+  flex: 0 0 500px;
   flex-direction: column;
   place-items: center;
+  min-height: 100vh;
 }
 
-ul.projects {
+.projects {
   background: var(--base-color-project-container);
+  grid-area: projects;
 }
 
 .projects.unfocus {
   filter: grayscale(60%);
 }
 
-ul.tasks {
+.tasks {
+  display: flex;
+  flex-direction: row;
+  flex: content;
   background: rgb(63, 64, 90);
+  grid-area: tasks;
 }
 
 .tasks li {
   background: var(--base-color-li);
+}
+
+.projectName {
+  flex: 1 1 300px;
+  align-items: center;
+  justify-content: center;
+  background-color: aquamarine;
+  padding: 1rem;
+  margin: 1rem;
+  place-self: start;
+  place-items: center;
 }

@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns';
 import { indexOf, update } from 'lodash';
-import { clearList, createList } from './dom.mjs';
+import { clearList, createList } from './dom.js';
 
 const clearInputs = () => {
   document.querySelector('.input-project').value = '';
@@ -10,7 +10,6 @@ const clearInputs = () => {
 
 const receiveItemData = (e) => {
   const projectText = document.querySelector('.input-project').value;
-  console.log(document.querySelector('#input-date').value);
   const dueDate = document.querySelector('#input-date').value;
   console.log('received project item data from inputs');
 
@@ -18,14 +17,11 @@ const receiveItemData = (e) => {
   console.log(typeof document.querySelector('#input-date').value);
   console.log(Date.parse(document.querySelector('#input-date').value));
 
-  console.log(e.target.parentElement);
-  console.log(e.target.parentElement.querySelector('input:first-of-type').id);
   const receiveTarget = e.target.parentElement.querySelector(
     'input:first-of-type'
-  ).id;
-  console.log(e.target.classList);
+  );
 
-  if (projectText && dueDate && receiveTarget === 'input-project') {
+  if ((projectText, dueDate && receiveTarget.id === 'input-project')) {
     const taskList = [];
     return {
       projectText,
@@ -45,19 +41,19 @@ const receiveItemData = (e) => {
 };
 
 const addItemToList = (e, item, list) => {
-  //if event origination (aka which ADD button was clicked)
-  //is ADD btn within ul>li then push the item to tasklist
-  const targetAddBtn = e.target;
-  if (targetAddBtn.classList.contains('add-task-btn')) {
-    const addTarget = e.target.closest('li').id;
+  //check which add button was clicked
+  //then add data to project list
+  //or add data to task list
+  console.log('adding to list...');
 
-    const foundItem = list.find(
-      (item) => item.dateCreated.toString() === addTarget
-    );
+  const addBtn = e.target;
+  if (addBtn.id === 'TASK-btn') {
+    const id = addBtn.closest('li').id;
+    const foundItem = list.find((item) => item.dateCreated.toString() === id);
     const targetIndex = list.indexOf(foundItem);
-    const targetTaskList = list[targetIndex].taskList;
+    const { targetTaskList } = list[targetIndex];
     targetTaskList.push(item);
-  } else if (e.target.id === 'ADD-btn') {
+  } else if (addBtn.id === 'ADD-btn') {
     //else push to project list
     list.push(item);
     console.log('added to array');
@@ -73,6 +69,13 @@ const delItemFromList = (e, list) => {
   );
   console.log({ filteredList });
   return filteredList;
+};
+
+const delLastAdded = () => {
+  const list = getFromLocalStorage();
+  list.splice(list.length - 1, 1);
+  localStorage.setItem('list', JSON.stringify(list));
+  console.log('reset clicked');
 };
 
 const editItem = (e, newData, list) => {
@@ -99,36 +102,34 @@ const saveToLocalStorage = (modifiedList) => {
 const getFromLocalStorage = () => {
   const data = localStorage.getItem('list') || '[]';
   console.log('retrieved list from local');
-  const cleanData = JSON.parse(data);
-  return cleanData;
+  const parsedData = JSON.parse(data);
+  console.log({ parsedData }, typeof parsedData);
+  return parsedData;
 };
 
 const handleAdd = (e) => {
-  e.preventDefault();
-
+  console.log('handling add...');
   //receive the data into obj
   const itemData = receiveItemData(e);
-  console.log({ itemData });
-
   //retrieve list from local storage
   const list = getFromLocalStorage();
-  console.log({ list });
 
-  if (itemData == null || list == null) {
-    return;
-  } else {
-    //push obj to array 'list'
+  if (isDataOKtoProcess(itemData, list)) {
     addItemToList(e, itemData, list);
-
-    //'list' is now modified and ready to store
-    //store array in local storage (stringify it first)
     saveToLocalStorage(list);
+  } else {
+    return;
+  }
+};
 
-    //clear the list before re-rendering
-    clearList();
-    console.log('list cleared');
-    //re-render list
-    createList(list, 0);
+const isDataOKtoProcess = (...data) => {
+  console.log('Processing data:', {...data});
+  if (data.includes(null) || data.includes(undefined)) {
+    console.error('Data is NOT OK to process');
+    return false;
+  } else {
+    console.log('Data is OK to process!');
+    return true;
   }
 };
 
@@ -141,33 +142,20 @@ const handleDel = (e) => {
 
   //store array in local storage (stringify it first)
   saveToLocalStorage(listAfterDel);
-
-  //clear the rendered list before re-rendering
-  clearList();
-
-  //re-render list
-  createList(listAfterDel, 0);
 };
 
 const handleEdit = (e) => {
   //get item data from edit fields
   const newData = getNewData();
-  console.log(newData);
+
   //retrieve list from local storage
   const list = getFromLocalStorage();
 
   //update obj property in array
   const listAfterEdit = editItem(e, newData, list);
-  console.log(listAfterEdit);
 
   //store array in local storage (stringify it first)
   saveToLocalStorage(listAfterEdit);
-
-  //clear the list before re-rendering
-  clearList();
-
-  //re-render list
-  createList(listAfterEdit, 0);
 
   //notify edit has been saved successfully
   alert('Item edited successfully');
@@ -197,11 +185,12 @@ const getNewData = () => {
 
 export {
   receiveItemData,
-  addItemToList,
   getFromLocalStorage,
   handleAdd,
   handleDel,
   handleEdit,
   isSame,
   clearInputs,
+  delLastAdded,
+  isDataOKtoProcess,
 };

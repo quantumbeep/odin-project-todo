@@ -4,14 +4,18 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    index: './src/index.mjs',
-    // print: './src/print.js',
+    index: './src/index.js',
   },
   devtool: 'inline-source-map',
   devServer: {
     static: './dist',
     hot: true,
     port: 8080,
+    open: {
+      app: {
+        name: 'Google Chrome',
+      },
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({

@@ -1,16 +1,16 @@
 import { format, parseISO } from 'date-fns';
 import { add, isArray } from 'lodash';
-import { getFromLocalStorage, isSame } from './logic.mjs';
+import { getFromLocalStorage, isDataOKtoProcess, isSame } from './logic.mjs';
 
 const createHeader = () => {
   const header = document.createElement('header');
   const mainForm = document.createElement('form');
   const text = createInput('text', 'project');
   const date = createInput('date', 'date');
-  const addItemBtn = createButton('ADD');
+  const addBtn = createButton('ADD');
   const resetBtn = createButton('RESET');
   header.classList.add('header');
-  mainForm.classList.add('main-form');
+  mainForm.classList.add('mainForm');
 
   header.append(mainForm);
 
@@ -18,7 +18,7 @@ const createHeader = () => {
   mainForm.append(text.label);
   mainForm.append(date.input);
   mainForm.append(date.label);
-  mainForm.append(addItemBtn);
+  mainForm.append(addBtn);
   mainForm.append(resetBtn);
   return header;
 };
@@ -129,58 +129,61 @@ const createList = (list) => {
 
   const inner = () => {
     const item = list[index];
-    console.log({ index });
-    console.log({ item });
-    const listItem = document.createElement('li');
-    const itemId = document.createElement('p');
-    const itemName = document.createElement('p');
-    const itemDue = document.createElement('p');
+    const result = isDataOKtoProcess(item);
+    console.log(result);
+    if (isDataOKtoProcess(item)) {
+      console.log('creating list!');
 
-    listItem.append(itemId);
-    listItem.append(itemName);
-    listItem.append(itemDue);
+      const listItem = document.createElement('li');
+      const itemId = document.createElement('p');
+      const itemName = document.createElement('p');
+      const itemDue = document.createElement('p');
+      listItem.append(itemId);
+      listItem.append(itemName);
+      listItem.append(itemDue);
 
-    itemName.classList.add('name');
+      itemName.classList.add('name');
 
-    const projectUl = document.querySelector('ul.projects');
-    const taskUl = document.querySelector('ul.tasks');
-    projectUl.append(listItem);
+      const projectUl = document.querySelector('ul.projects');
+      const taskUl = document.querySelector('ul.tasks');
+      projectUl.append(listItem);
 
-    Object.entries(item).forEach(([key, value]) => {
-      switch (key) {
-        case 'projectText':
-          itemName.textContent = value;
-          break;
-        case 'dueDate':
-          itemDue.textContent = value;
-          break;
-        case 'dateCreated':
-          itemId.textContent = value;
-          listItem.setAttribute('id', value);
-          break;
-        case 'taskText':
-          itemName.textContent = value;
-          taskUl.append(listItem);
-          break;
-        case 'taskList':
-          listItem.addEventListener('click', (e) => {
+      Object.entries(item).forEach(([key, value]) => {
+        switch (key) {
+          case 'projectText':
+            itemName.textContent = value;
+
+            break;
+          case 'dueDate':
+            itemDue.textContent = value;
+            break;
+          case 'dateCreated':
+            itemId.textContent = value;
+            listItem.setAttribute('id', value);
+            break;
+          case 'taskText':
+            itemName.textContent = value;
+            taskUl.append(listItem);
+            break;
+          case 'taskList':
             if (value.length > 0) {
-              const clickedProject = e.target.closest('li').id;
-              const targetProject = list.find(
-                (item) => item.dateCreated.toString() === clickedProject
-              );
               console.log({ targetProject });
               taskUl.textContent = '';
               createList(value);
             } else {
-              taskUl.textContent = '';
+              // taskUl.textContent = '';
             }
-          });
-          break;
-        default:
-          break;
-      }
-    });
+
+            break;
+          default:
+            alert('There are no projects. Please add one first.');
+            break;
+        }
+      });
+    } else {
+      console.error('data did not pass isDataOKtoProcess');
+      return;
+    }
     if (index < list.length - 1) {
       index++;
       inner();
@@ -195,27 +198,31 @@ const reset = () => {
   createList();
 };
 
-const clearList = () => {
-  const pl = document.querySelector('.projects');
-  const tl = document.querySelector('.tasks');
-  pl.replaceChildren();
-  tl.replaceChildren();
-};
-
 //delete all data from browser local storage
 const clearLocalStorage = () => {
   localStorage.clear();
   console.log('local cleared');
 };
 
+const clearList = () => {
+  const pl = document.querySelector('ul.projects');
+  const tl = document.querySelector('ul.tasks');
+  pl.replaceChildren();
+  tl.replaceChildren();
+};
+
 //create and show the edit input fields
-const showEditField = (e) => {
+const editProjectName = (e) => {
   //target should be EDIT button element
   console.log(e.target);
+
+  //add 'editmode' to classlist of target li
+  e.target.closest('ul').classList.add('editmode');
 
   //replace EDIT button with DONE button
   e.target.textContent = 'DONE';
   e.target.classList.remove('EDIT');
+  e.target.classList.add('DONE');
   e.target.id = 'DONE-btn';
   const projectUl = document.querySelector('ul.projects');
 
@@ -246,6 +253,7 @@ const showEditField = (e) => {
       e.target.parentNode.querySelector('button').textContent = 'SAVE';
     } else {
       e.target.parentNode.querySelector('button').id = 'DONE-btn';
+      e.target.parentNode.querySelector('button').classList.add('DONE');
       e.target.parentNode.querySelector('button').textContent = 'DONE';
     }
   });
@@ -257,21 +265,19 @@ const handleDone = (e) => {
   e.target.parentNode.querySelector('button').textContent = 'EDIT';
   const nameEl = e.target.closest('li').querySelector('p.name');
   nameEl.contentEditable = false;
+  e.target.closest('ul').classList.remove('editmode')
 };
 
-//note to self: integrate into handleDone and showEditField functions as one fn
 const handleSave = (e) => {
-  console.log(e.target);
   //get id of save target from element
   const targetId = e.target.parentNode.id;
   //assign updated data to const newData for later update
   const newData = e.target.parentNode.querySelector('p.name').textContent;
 
   //get the list data from local storage
-
   const list = getFromLocalStorage();
 
-  //find the item in data that matches SAVE button event.target
+  //find the item in list that matches SAVE button event.target
   const foundItem = list.find(
     (item) => item.dateCreated.toString() === targetId
   );
@@ -297,6 +303,8 @@ const handleSave = (e) => {
   e.target.parentNode.querySelector('button').textContent = 'EDIT';
   const nameEl = e.target.closest('li').querySelector('p.name');
   nameEl.contentEditable = false;
+  e.target.closest('ul').classList.remove('editmode')
+
 };
 
 const removeEditField = () => {
@@ -321,65 +329,63 @@ const autoToggleSave = (e) => {
   }
 };
 
-const highlightProject = (e) => {
-  console.log(e.target);
-  if (
-    e.target.tagName !== 'BUTTON' ||
-    e.target.tagName !== 'INPUT' ||
-    e.target !== document.querySelector('ul.tasks li')
-  ) {
-    const notActiveLi = document.querySelectorAll('li:not(li li)');
-    console.log(notActiveLi);
-    notActiveLi.forEach((element) => element.classList.remove('active'));
-    const activeLi = e.target.closest('li:not(li li)');
-    activeLi.classList.add('active');
-    console.log('class active added');
-  }
+const setActive = (e) => {
+  const notActiveList = document.querySelectorAll('li:not(li li)');
+  notActiveList.forEach((element) => element.classList.remove('active'));
+  const activeLi = e.target.closest('li:not(li li)');
+  activeLi.classList.add('active');
+  const taskUl = document.querySelector('ul.tasks');
+  const projectName = document.createElement('div');
+  projectName.classList.add('projectName');
+  console.log(e.target.closest('li').querySelector('p.name').textContent);
+  projectName.textContent = e.target
+    .closest('li')
+    .querySelector('p.name').textContent;
+  taskUl.replaceChildren();
+  taskUl.prepend(projectName);
 };
 
+let hoveredLi = null;
 const hoverProject = (e) => {
-  console.log(e.target);
   if (
     e.target.tagName === 'LI' &&
-    e.target.id &&
-    e.target !== document.querySelector('ul.tasks li') &&
-    !e.target.parentNode.querySelector('#DONE-btn') &&
-    !e.target.parentNode.querySelector('#SAVE-btn') &&
-    !e.target.parentNode.querySelector('#EDIT-btn')
+    !e.target.closest('ul').classList.contains('editmode')
+    // !document.querySelector('#DONE-btn') &&
+    // !document.querySelector('#SAVE-btn')
   ) {
-    e.target.classList.add('hovering');
-    console.log('class hovering added');
+    hoveredLi = e.target;
+    hoveredLi.classList.add('hovering');
     const editButton = createButton('EDIT');
-    e.target.append(editButton);
+    hoveredLi.append(editButton);
   }
 };
 
-//removes 'hovering' class from li so css returns to base color
-//grabs and removes edit button from target li
 const unHoverProject = (e) => {
-  e.target.classList.remove('hovering');
-  const toBeRemovedNode = document.querySelector('#EDIT-btn');
-  toBeRemovedNode.remove();
-  setTimeout(() => {
-    console.log({ toBeRemovedNode });
-  }, 1000);
+  if (
+    hoveredLi &&
+    e.relatedTarget.tagName !== 'P' &&
+    e.relatedTarget.tagName !== 'BUTTON'
+  ) {
+    hoveredLi.classList.remove('hovering');
+    hoveredLi.querySelector('#EDIT-btn').remove();
+    hoveredLi = null;
+  }
 };
 
 export {
-  createHeader,
-  createInput,
-  // createLi,
-  createList,
+  autoToggleSave,
   clearList,
   clearLocalStorage,
-  autoToggleSave,
-  showEditField,
-  removeEditField,
-  reset,
-  highlightProject,
   createButton,
-  hoverProject,
-  unHoverProject,
+  createHeader,
+  createInput,
+  createList,
+  editProjectName,
   handleDone,
   handleSave,
+  hoverProject,
+  removeEditField,
+  reset,
+  setActive,
+  unHoverProject,
 };
