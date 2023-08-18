@@ -3,25 +3,24 @@ import { indexOf, update } from 'lodash';
 import { clearList, createList } from './dom.js';
 
 const clearInputs = () => {
-  document.querySelector('.input-project').value = '';
-  document.querySelector('.input-date').value = '';
-  console.log('input fields cleared');
+  document.querySelector('#project').value = '';
+  document.querySelector('#date').value = '';
 };
 
 const receiveItemData = (e) => {
-  const projectText = document.querySelector('.input-project').value;
-  const dueDate = document.querySelector('#input-date').value;
+  const projectText = document.querySelector('#project').value;
+  const dueDate = document.querySelector('#date').value;
   console.log('received project item data from inputs');
 
   const dateCreated = Date.now();
-  console.log(typeof document.querySelector('#input-date').value);
-  console.log(Date.parse(document.querySelector('#input-date').value));
+  console.log(typeof document.querySelector('#date').value);
+  console.log(Date.parse(document.querySelector('#date').value));
 
   const receiveTarget = e.target.parentElement.querySelector(
     'input:first-of-type'
   );
 
-  if ((projectText, dueDate && receiveTarget.id === 'input-project')) {
+  if ((projectText, dueDate && receiveTarget.id === 'project')) {
     const taskList = [];
     return {
       projectText,

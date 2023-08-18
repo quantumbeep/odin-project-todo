@@ -3,6 +3,7 @@ import {
   clearList,
   createButton,
   createHeader,
+  createInput,
   createList,
   editProjectName,
   handleDone,
@@ -35,11 +36,9 @@ wrapperDiv.classList.add('wrapper');
 projectList.classList.add('projects');
 taskList.classList.add('tasks');
 document.body.append(wrapperDiv);
+
 wrapperDiv.append(projectList);
 wrapperDiv.append(taskList);
-const addTaskBtn = createButton('ADD');
-addTaskBtn.classList.add('addtask');
-wrapperDiv.prepend(addTaskBtn);
 
 const loadPage = () => {
   clearInputs();
@@ -48,17 +47,7 @@ const loadPage = () => {
   console.log({ list });
 
   createList(list);
-  //grab all li elements from projects ul
-  //add event listener to each li for cursor leaving li
-  //event triggers unHoverProject
 
-  // const allLiProjects = document.querySelectorAll('.projects > li');
-  // allLiProjects.forEach((element) => {
-  //   element.addEventListener('mouseleave', (e) => {
-  //     console.log('mouseleave triggered');
-  //     unHoverProject(e);
-  //   });
-  // });
 };
 //event delegation for buttons within li element
 document.body.addEventListener('click', (e) => {
@@ -83,20 +72,7 @@ document.body.addEventListener('click', (e) => {
   }
 });
 
-// const debounce = (fn, delay) => {
-//   let timeout;
-//   return (...args) => {
-//     if (timeout) {
-//       clearTimeout(timeout);
-//     }
-//     setTimeout(() => {
-//       fn(...args);
-//     }, delay);
-//   };
-// };
 
-// const debouncedUnHover = debounce(unHoverProject, 1);
-// const debouncedHover = debounce(hoverProject, 1);
 
 const projectUl = document.querySelector('.projects');
 

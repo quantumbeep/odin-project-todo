@@ -39,9 +39,9 @@ button {
   background: rgb(0, 56, 135);
   color: white;
   border: 1px outset rgb(117, 177, 255);
-  border-radius: 100px;
-  margin: 2px;
-  padding: 0px 1rem;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 0.5rem;
   font-size: 15px;
   transition: ease-in-out 0.1s;
   align-items: center;
@@ -69,6 +69,11 @@ input {
   align-items: center;
   justify-content: center;
   text-align: center;
+  margin: 1rem;
+}
+
+input[type='date'] {
+  width: 200px;
 }
 
 li input {
@@ -84,41 +89,19 @@ label {
   color: rgb(0, 0, 0);
 }
 
-.li-data-container {
-  display: grid;
-  grid-auto-rows: 1fr;
-  background: rgb(117, 177, 255);
-  place-self: start;
-  min-width: none;
-}
-
-.li-btn-container {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
-  place-self: center center;
-}
-
-li p {
-  font-size: 16px;
-}
 li p:nth-child(3) {
-  place-self: end start;
   font-size: 8px;
-  grid-row: 6;
 }
+
 li {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background: rgb(184, 167, 167);
+  display: flex;
+  flex-flow: column wrap;
+  ;  background: rgb(184, 167, 167);
   border: #333 1px solid;
-  border-radius: 5px;
-  width: 90%;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+
   place-items: center;
   padding: 0.5rem;
-  min-height: 200px
+  min-height: 100px;
 }
 
 .projects li.active {
@@ -135,81 +118,29 @@ li {
   cursor: pointer;
 }
 
-/* li form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  place-items: space-between;
-} */
-
-/* ul.preview-list {
-  background: none;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1px;
-  place-self: center start;
-  min-width: 150px;
-  max-width: max-content;
-} */
-
-/* ul.preview-list li {
-  display: flex;
-  background: rgb(9, 31, 50);
-  height: 20px;
-  width: 200px;
-  color: rgb(235, 173, 92);
-  padding: 0.2rem;
-  margin: 0;
-} */
-
 section {
   background: blueviolet;
 }
 
 .wrapper {
-  display: grid;
-  grid-template-areas:
-    '. . addtask'
-    'projects tasks tasks';
-
-  background: rgb(204, 137, 211);
-  grid-template-rows: 50px auto;
-  grid-template-columns: 40% 30% 30%;
-  margin: 2rem;
-  padding: 2rem;
-  gap: 10px
-}
-
-.addtask {
-  grid-area: addtask;
-  grid-column: 3 / 4;
-  /* place-self: center; */
-  font-size: larger;
-}
-
-ul {
   display: flex;
-  flex: 0 0 500px;
-  flex-direction: column;
-  place-items: center;
-  min-height: 100vh;
+  background: rgb(87, 89, 206);
+  border: #aeff52 1px solid;
+}
+
+button.addtask {
+  font-size: medium;
 }
 
 .projects {
-  background: var(--base-color-project-container);
-  grid-area: projects;
-}
-
-.projects.unfocus {
-  filter: grayscale(60%);
+  background: rgb(53, 41, 58);
+  width: 30%;
 }
 
 .tasks {
   display: flex;
-  flex-direction: row;
-  flex: content;
   background: rgb(63, 64, 90);
-  grid-area: tasks;
+  width: 99%;
 }
 
 .tasks li {
@@ -226,3 +157,4 @@ ul {
   place-self: start;
   place-items: center;
 }
+

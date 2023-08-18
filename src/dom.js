@@ -11,6 +11,7 @@ const createHeader = () => {
   const resetBtn = createButton('RESET');
   header.classList.add('header');
   mainForm.classList.add('mainForm');
+  const { input, label } = createInput('text', 'task');
 
   header.append(mainForm);
 
@@ -20,6 +21,14 @@ const createHeader = () => {
   mainForm.append(date.label);
   mainForm.append(addBtn);
   mainForm.append(resetBtn);
+  mainForm.append(input);
+  mainForm.append(label);
+  const taskBtn = createButton('ADD');
+  let {id} = taskBtn;
+  console.log(id); //ADD-btn
+  id = 'task-btn'
+  
+  mainForm.append(taskBtn);
   return header;
 };
 
@@ -114,7 +123,7 @@ const createInput = (type, name) => {
   input.setAttribute('type', type);
   input.setAttribute('value', name);
   input.setAttribute('name', name);
-  input.setAttribute('id', `input-${name}`);
+  input.setAttribute('id', `${name}`);
   input.setAttribute('placeholder', `Enter the ${name} here...`);
   input.classList.add(`input-${type}`, `input-${name}`);
 
@@ -211,12 +220,13 @@ const clearList = () => {
   tl.replaceChildren();
 };
 
-//create and show the edit input fields
+// USER CAN CLICK ON EDIT BUTTON WHILE HOVERING OVER EACH
+// PROJECT TO CHANGE THE NAME OF THE PROJECT
 const editProjectName = (e) => {
   //target should be EDIT button element
   console.log(e.target);
 
-  //add 'editmode' to classlist of target li
+  //add 'editmode' to classlist of ul
   e.target.closest('ul').classList.add('editmode');
 
   //replace EDIT button with DONE button
@@ -261,11 +271,14 @@ const editProjectName = (e) => {
 
 const handleDone = (e) => {
   console.log(e.target);
-  e.target.parentNode.querySelector('button').id = 'EDIT-btn';
-  e.target.parentNode.querySelector('button').textContent = 'EDIT';
+  console.log(e.target.id);
+  e.target.id = 'EDIT-btn';
+  console.log(e.target.id);
+
+  e.target.textContent = 'EDIT';
   const nameEl = e.target.closest('li').querySelector('p.name');
   nameEl.contentEditable = false;
-  e.target.closest('ul').classList.remove('editmode')
+  e.target.closest('ul').classList.remove('editmode');
 };
 
 const handleSave = (e) => {
@@ -277,7 +290,7 @@ const handleSave = (e) => {
   //get the list data from local storage
   const list = getFromLocalStorage();
 
-  //find the item in list that matches SAVE button event.target
+  //find the item in list that matches targetId
   const foundItem = list.find(
     (item) => item.dateCreated.toString() === targetId
   );
@@ -289,22 +302,21 @@ const handleSave = (e) => {
   const targetIndex = list.indexOf(foundItem);
 
   //splice it into list
-  list.splice(targetIndex, 1, updatedItem);
   const userSelection = confirm(
-    `Confirm save? from ${projectText} to ${newData}`
+    `Confirm the change? from ${projectText} to ${newData}`
   );
   if (userSelection) {
+    list.splice(targetIndex, 1, updatedItem);
     localStorage.setItem('list', JSON.stringify(list));
   } else {
+    e.target.parentNode.querySelector('p.name').textContent = projectText;
   }
 
-  e.target.parentNode.querySelector('p.name').textContent;
   e.target.parentNode.querySelector('button').id = 'EDIT-btn';
   e.target.parentNode.querySelector('button').textContent = 'EDIT';
   const nameEl = e.target.closest('li').querySelector('p.name');
   nameEl.contentEditable = false;
-  e.target.closest('ul').classList.remove('editmode')
-
+  e.target.closest('ul').classList.remove('editmode');
 };
 
 const removeEditField = () => {
@@ -330,10 +342,10 @@ const autoToggleSave = (e) => {
 };
 
 const setActive = (e) => {
-  const notActiveList = document.querySelectorAll('li:not(li li)');
-  notActiveList.forEach((element) => element.classList.remove('active'));
-  const activeLi = e.target.closest('li:not(li li)');
-  activeLi.classList.add('active');
+  const nonActiveProjects = document.querySelectorAll('li:not(li li)');
+  nonActiveProjects.forEach((project) => project.classList.remove('active'));
+  const activeProject = e.target.closest('li:not(li li)');
+  activeProject.classList.add('active');
   const taskUl = document.querySelector('ul.tasks');
   const projectName = document.createElement('div');
   projectName.classList.add('projectName');
@@ -347,27 +359,27 @@ const setActive = (e) => {
 
 let hoveredLi = null;
 const hoverProject = (e) => {
+  console.log(!document.querySelector('#EDIT-btn'));
   if (
     e.target.tagName === 'LI' &&
     !e.target.closest('ul').classList.contains('editmode')
-    // !document.querySelector('#DONE-btn') &&
-    // !document.querySelector('#SAVE-btn')
   ) {
     hoveredLi = e.target;
     hoveredLi.classList.add('hovering');
+  }
+  if (!e.target.parentNode.querySelector('#EDIT-btn')) {
     const editButton = createButton('EDIT');
     hoveredLi.append(editButton);
   }
 };
 
 const unHoverProject = (e) => {
-  if (
-    hoveredLi &&
-    e.relatedTarget.tagName !== 'P' &&
-    e.relatedTarget.tagName !== 'BUTTON'
-  ) {
+  console.log('unhover');
+  if (hoveredLi && !e.target.contains(e.relatedTarget)) {
     hoveredLi.classList.remove('hovering');
-    hoveredLi.querySelector('#EDIT-btn').remove();
+    if (document.querySelector('#EDIT-btn')) {
+      hoveredLi.querySelector('#EDIT-btn').remove();
+    }
     hoveredLi = null;
   }
 };
